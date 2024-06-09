@@ -1,4 +1,5 @@
-## README
+# ImprovisedRefinery
+> Adds hullmod that converts Ore into Rare Ore
 
 ### Build
 Run `build/build.bash` file.
