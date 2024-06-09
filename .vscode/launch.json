@@ -10,19 +10,6 @@
       "request": "attach",
       "hostName": "localhost",
       "port": "8015"
-    },
-    {
-      "type": "java",
-      "name": "Current File",
-      "request": "launch",
-      "mainClass": "${file}"
-    },
-    {
-      "type": "java",
-      "name": "App",
-      "request": "launch",
-      "mainClass": "App",
-      "projectName": "test-mod_50ebf8ca"
     }
   ]
 }

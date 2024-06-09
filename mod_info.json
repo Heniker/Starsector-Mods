@@ -1,10 +1,10 @@
 {
-  "id": "pt_qolpack",
-  "name": "my test mod",
-  "author": "me",
+  "id": "ImprovisedRefinery",
+  "name": "ImprovisedRefinery",
+  "author": "heniker",
   "version": "0.0.1",
-  "description": "It's my mod",
+  "description": "Hullmod that converts Ore into Rare Ore",
   "gameVersion": "0.97a",
-  "jars": ["data/jars/ImprovisedRefinery.jar"],
+  "jars": ["build/dist/ImprovisedRefinery.jar"],
   "modPlugin": "data.scripts.IR_ModPlugin"
 }

@@ -14,7 +14,7 @@ import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 
-import data.Misc;
+import data.MyMisc;
 
 /**
  * Hull mod that converts Ore into Rare ore
@@ -28,7 +28,7 @@ public class IR_ImprovisedRefinery extends BaseLogisticsHullMod {
    public float daysSinceLastTrigger = 0F;
 
    public static int getConversionRate(FleetMemberAPI member, HullModSpecAPI spec) {
-      boolean sMod = Misc.isSMod(member.getStats(), spec);
+      boolean sMod = MyMisc.isSMod(member.getStats(), spec);
 
       float conversionRate = sMod ? BASE_CONVERSION_RATE * SMOD_BONUS_RATE : BASE_CONVERSION_RATE;
       return Math.round(conversionRate);
