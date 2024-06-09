@@ -1,5 +1,5 @@
 # ImprovisedRefinery
-> Adds hullmod that converts Ore into Rare Ore
+> Hullmod that converts Ore into Rare Ore
 
 ### Build
 Run `build/build.bash` file.
@@ -24,3 +24,9 @@ For debugging add following to `vmparams` file in starsector directory:
 Then launch VSCode "attach" debug configuration.
 
 Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.zip`
+
+<!--
+TODO:
+Test SMod ratios.
+Add integration with Corrupted Nanoforge, Prestine Nanoforge.
+-->
