@@ -1,0 +1,19 @@
+id,name,order,tier,reqPoints,reqPointsPerExtraSkill,description,author,combat officer,admiral,admin,tags,icon,
+# COMBAT,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+
+# LEADERSHIP,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+
+# TECHNOLOGY,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+
+
+# INDUSTRY,,,,,,,,,,,,,
+# vanilla override,,,,,,,,,,,,,
+makeshift_equipment,Makeshift Equipment,1560,4,2,,I guess we left the spares in orbit. It'll be fine ... [static] ... just watch.,"audio backup transcription, Jericho Wheeler, leader of expedition ""H""-team",,,,,graphics/icons/skills/makeshift_equipment.png,
+,,,,,,,,,,,,,
+
+
+# Misc non-player,,,,,,,,,,,,,
+,,,,,,,,,,,,,

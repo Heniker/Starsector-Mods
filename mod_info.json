@@ -1,0 +1,10 @@
+{
+  "id": "pt_qolpack",
+  "name": "my test mod",
+  "author": "me",
+  "version": "0.0.1",
+  "description": "It's my mod",
+  "gameVersion": "0.97a",
+  "jars": ["data/jars/ImprovisedRefinery.jar"],
+  "modPlugin": "data.scripts.IR_ModPlugin"
+}

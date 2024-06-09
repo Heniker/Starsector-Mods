@@ -1,0 +1,16 @@
+{
+	"id":"makeshift_equipment",
+	"governingAptitude":"industry",
+	"compressHullmods":false,
+	"scope":"FLEET",
+	"effectGroups":[
+		{
+			"requiredSkillLevel":1,
+			"effectBasedOnLevel":false,
+			"effects":[
+				{"type":"ABILITY_UNLOCK", "abilities":["IR_AbilityToggle"]},
+				{"type":"HULLMOD_UNLOCK", "hullmods":{"IR_ImprovisedRefinery":1}},
+			]
+		},
+	],
+}
