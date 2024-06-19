@@ -6,5 +6,5 @@
   "description": "Hullmod that converts Ore into Rare Ore",
   "gameVersion": "0.97a",
   "jars": ["build/dist/ImprovisedRefinery.jar"],
-  "modPlugin": "data.scripts.IR_ModPlugin"
+  "modPlugin": "data.scripts.HE_ModPlugin"
 }

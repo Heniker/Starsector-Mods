@@ -25,9 +25,9 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-import data.hullmods.IR_ImprovisedRefinery;
+import data.hullmods.HE_ImprovisedRefinery;
 
-public class IR_AbilityToggle extends BaseToggleAbility {
+public class HE_AbilityToggle extends BaseToggleAbility {
 
 	public static float SLIPSTREAM_DETECTION_RANGE = 20000f;
 
@@ -58,12 +58,12 @@ public class IR_AbilityToggle extends BaseToggleAbility {
 
 	@Override
 	protected void activateImpl() {
-		IR_ImprovisedRefinery.EnbabledForPlayerFleet = true;
+		HE_ImprovisedRefinery.EnabledForPlayerFleet = true;
 	}
 
 	@Override
 	protected void deactivateImpl() {
-		IR_ImprovisedRefinery.EnbabledForPlayerFleet = false;
+		HE_ImprovisedRefinery.EnabledForPlayerFleet = false;
 	}
 
 	@Override
@@ -93,9 +93,9 @@ public class IR_AbilityToggle extends BaseToggleAbility {
 
 		int oreProcessedPerDay = 0;
 		for (FleetMemberAPI member : fleetMemebers) {
-			oreProcessedPerDay += member.getVariant().hasHullMod("IR_ImprovisedRefinery")
-					? IR_ImprovisedRefinery.getConversionRate(member,
-							Global.getSettings().getHullModSpec("IR_ImprovisedRefinery"))
+			oreProcessedPerDay += member.getVariant().hasHullMod("HE_ImprovisedRefinery")
+					? HE_ImprovisedRefinery.getConversionRate(member,
+							Global.getSettings().getHullModSpec("HE_ImprovisedRefinery"))
 					: 0;
 		}
 		;
@@ -104,10 +104,10 @@ public class IR_AbilityToggle extends BaseToggleAbility {
 				pad);
 
 		tooltip.addPara(
-				"Currently capable of converting %s Ore into %s Rare Ore per day.",
+				"Your refineries are capable of converting %s Ore into %s Rare Ore per day.",
 				pad, highlight,
 				"" + (int) oreProcessedPerDay,
-				"" + IR_ImprovisedRefinery.getRecievedRareOre(fleet.getFleetData().getFleet().getFlagship(),
+				"" + HE_ImprovisedRefinery.getRecievedRareOre(fleet.getFleetData().getFleet().getFlagship(),
 						oreProcessedPerDay));
 
 		// tooltip.addPara("Increases the range at which the fleet can be detected by

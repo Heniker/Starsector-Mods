@@ -8,8 +8,8 @@
 			"requiredSkillLevel":1,
 			"effectBasedOnLevel":false,
 			"effects":[
-				{"type":"ABILITY_UNLOCK", "abilities":["IR_AbilityToggle"]},
-				{"type":"HULLMOD_UNLOCK", "hullmods":{"IR_ImprovisedRefinery":1}},
+				{"type":"ABILITY_UNLOCK", "abilities":["HE_AbilityToggle"]},
+				{"type":"HULLMOD_UNLOCK", "hullmods":{"HE_ImprovisedRefinery":1}},
 			]
 		},
 	],

@@ -5,7 +5,10 @@
 Run `build/build.bash` file.
 
 Javac and Jar installed by scoop:
-`scoop install openjdk8-redhat`
+```
+scoop bucket add java
+scoop install openjdk8-redhat
+```
 
 ```bash
 $ javac -version
@@ -29,4 +32,7 @@ Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.z
 TODO:
 Test SMod ratios.
 Add integration with Corrupted Nanoforge, Prestine Nanoforge.
+
+If ship is scuttled before repairs are finished - modifiers may be left forever (or until reload).
+This is because Starsector does not call advanceInCampaign for the ship beeing scuttled.
 -->

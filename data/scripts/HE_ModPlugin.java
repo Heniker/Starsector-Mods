@@ -2,8 +2,8 @@ package data.scripts;
 
 import com.fs.starfarer.api.BaseModPlugin;
 
-public class IR_ModPlugin extends BaseModPlugin {
-   public IR_ModPlugin() {
+public class HE_ModPlugin extends BaseModPlugin {
+   public HE_ModPlugin() {
    }
 
    public void onApplicationLoad() throws ClassNotFoundException {
