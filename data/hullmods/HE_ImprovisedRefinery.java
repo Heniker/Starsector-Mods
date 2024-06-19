@@ -1,5 +1,8 @@
 package data.hullmods;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
@@ -18,18 +21,20 @@ import com.fs.starfarer.api.loading.HullModSpecAPI;
 
 import data.MyMisc;
 
-/**
- * Hull mod that converts Ore into Metals
- */
 public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    public static final float DAYS_TO_TRIGGER = 0.3F;
 
-   public static final float USAGE_TAX = 0.75F;
+   public static final String COMMODITY_FROM = Commodities.ORE;
+   public static final String COMMODITY_TO = Commodities.METALS;
+   public static final float CONVERSION_TAX = 0.75F;
    public static final float PRISTINE_N_TAX_BONUS_FLAT = 0.1F;
+   public static final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(COMMODITY_FROM,
+         COMMODITY_TO);
    public static final float BASE_CONVERSION_SPEED = DAYS_TO_TRIGGER * 72; // units per trigger
    public static final float SMOD_BONUS_RATE = 1.4F;
    public static final float NANOFORGE_BONUS_RATE = 1.5F;
 
+   // hack to allow ability toggle to work
    public static boolean EnabledForPlayerFleet = false;
 
    public static float getConversionRate(FleetMemberAPI member, HullModSpecAPI spec) {
@@ -57,26 +62,24 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
    public static float getUsedOre(FleetMemberAPI member, HullModSpecAPI spec) {
       float conversionRate = getConversionRate(member, spec);
-      float oreAmount = member.getFleetData().getFleet().getCargo().getCommodityQuantity(Commodities.ORE);
-      float oreUsed = oreAmount > conversionRate ? conversionRate : oreAmount;
+      float fleetOre = member.getFleetData().getFleet().getCargo().getCommodityQuantity(COMMODITY_FROM);
+      float oreUsed = fleetOre > conversionRate ? conversionRate : fleetOre;
 
       return oreUsed;
    }
 
    public static float getRecievedRareOre(FleetMemberAPI member, float usedOre) {
       float tax = member.getFleetData().getFleet().getCargo().getQuantity(CargoItemType.SPECIAL,
-            new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1 ? USAGE_TAX + PRISTINE_N_TAX_BONUS_FLAT
-                  : USAGE_TAX;
+            new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1 ? CONVERSION_TAX + PRISTINE_N_TAX_BONUS_FLAT
+                  : CONVERSION_TAX;
 
-      return MyMisc.convertCommodityByValue(Commodities.ORE, Commodities.METALS, usedOre) * tax;
+      return BASE_CONVERSION_RATIO * usedOre * tax;
    }
-
-   public float nextTriggerIn = 0F;
 
    @Override
    public String getDescriptionParam(int index, ShipAPI.HullSize hullSize) {
       if (index == 0)
-         return "" + (int) Math.round(USAGE_TAX * 100) + "%";
+         return "" + (int) Math.round(CONVERSION_TAX * 100) + "%";
       return null;
    }
 
@@ -87,25 +90,42 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
       return null;
    }
 
+   class State {
+      public float nextTriggerIn;
+      public boolean isInPlayerFleet;
+   }
+
+   public Map<FleetMemberAPI, State> state = new WeakHashMap<FleetMemberAPI, State>();
+
    @Override
    public void advanceInCampaign(FleetMemberAPI member, float amount) {
-      if (isInPlayerFleet(member.getStats()) && !EnabledForPlayerFleet) {
+      State data = state.get(member);
+
+      if (data == null) {
+         State s = new State();
+         s.isInPlayerFleet = isInPlayerFleet(member.getStats());
+         s.nextTriggerIn = DAYS_TO_TRIGGER;
+         data = state.put(member, s);
+         data = s;
+      }
+
+      if (data.isInPlayerFleet && !EnabledForPlayerFleet) {
          return;
       }
 
-      if (nextTriggerIn > 0) {
-         nextTriggerIn -= Global.getSector().getClock().convertToDays(amount);
+      if (data.nextTriggerIn > 0) {
+         data.nextTriggerIn -= Global.getSector().getClock().convertToDays(amount);
          return;
       }
 
-      nextTriggerIn = DAYS_TO_TRIGGER + nextTriggerIn;
+      data.nextTriggerIn = DAYS_TO_TRIGGER + data.nextTriggerIn;
 
       float usedOre = getUsedOre(member, this.spec);
 
       if (usedOre > 0) {
          CargoAPI cargo = member.getFleetData().getFleet().getCargo();
-         cargo.removeCommodity(Commodities.ORE, usedOre);
-         cargo.addCommodity(Commodities.RARE_ORE, getRecievedRareOre(member, usedOre));
+         cargo.removeCommodity(COMMODITY_FROM, usedOre);
+         cargo.addCommodity(COMMODITY_TO, getRecievedRareOre(member, usedOre));
       }
    }
 

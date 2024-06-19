@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import java.awt.Color;
+import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SettingsAPI;
 import com.fs.starfarer.api.campaign.BuffManagerAPI;
@@ -32,6 +34,9 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
+import com.fs.starfarer.api.ui.LabelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.Misc;
 
 import data.MyMisc;
 
@@ -40,16 +45,19 @@ import data.MyMisc;
  * reduces supply consumption during CR recovery at the cost of metals
  */
 public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
+   public static final float DAYS_TO_TRIGGER = 0.3F;
+
    public static final String BONUS_ID = "repair_equipment_bonus";
    public static final float REPAIR_BONUS = 1.5F;
    public static final float SUPPLIES_RECOVERY_BONUS = 0.5F;
-   public static final float DAYS_TO_TRIGGER = 0.2F;
-   public static final float CR_REPAIR = 0.1F;
+   public static final float MIN_CR = 0.1F;
 
    public static boolean isValidForRepair(FleetMemberAPI repairShip, FleetMemberAPI repairTarget) {
       return repairShip != null && repairTarget != null && repairTarget != repairShip
             && repairShip.getFleetData() != null
-            && repairShip.getRepairTracker().getCR() >= 0.1F
+            && repairShip.getFleetData().getFleet().getCargo().getCommodityQuantity(
+                  Commodities.METALS) > 0
+            && repairShip.getRepairTracker().getCR() >= MIN_CR
             && repairShip.getFleetData().getMembersInPriorityOrder().contains(repairTarget)
             && !repairShip.getRepairTracker().isSuspendRepairs()
             && repairTarget.getRepairTracker().getCR() < repairTarget.getRepairTracker().getMaxCR()
@@ -68,17 +76,28 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    }
 
    public static class RepairEquipmentBuff implements Buff {
+      private static final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.METALS,
+            Commodities.SUPPLIES);
+      public static final float USAGE_TAX = 1.2F;
+
+      public static float getUsedMetalsPerDay(MutableShipStatsAPI stats) {
+         return MyMisc.round(MyMisc.getRecoverySuppliesPerDay(stats) * BASE_CONVERSION_RATIO * USAGE_TAX, 2);
+      }
+
       private FleetMemberAPI repairTarget;
       private FleetMemberAPI repairShip;
       private boolean expired = false;
+      private float metalsPerDay;
 
       public RepairEquipmentBuff(FleetMemberAPI repairShip, FleetMemberAPI repairTarget) {
          this.repairTarget = repairTarget;
          this.repairShip = repairShip;
+         this.metalsPerDay = getUsedMetalsPerDay(repairTarget.getStats());
+         // this.suppliesToFinishRepairs = repairTarget.getRepairTracker()
       }
 
       public boolean isExpired() {
-         return expired && (expired = isValidForRepair(repairShip, repairTarget));
+         return expired;
       }
 
       public String getId() {
@@ -91,8 +110,16 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
                REPAIR_BONUS);
       }
 
-      public void advance(float days) {
-         // duration -= days;
+      public void advance(float amount) {
+         if (!isValidForRepair(repairShip, repairTarget)) {
+            expired = true;
+            return;
+         }
+
+         float metalsShouldUse = metalsPerDay * Global.getSector().getClock().convertToDays(amount);
+         CargoAPI cargo = repairShip.getFleetData().getFleet().getCargo();
+         cargo.removeCommodity(Commodities.METALS, metalsShouldUse);
+
       }
    };
 
@@ -102,17 +129,10 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
       public RepairEquipmentBuff buffInstance;
    }
 
-   @Override
-   public String getDescriptionParam(int index, ShipAPI.HullSize hullSize) {
-      if (index == 0)
-         return "" + DAYS_TO_TRIGGER;
-      if (index == 1)
-         return "" + (int) Math.round(CR_REPAIR * 100) + "%";
-      return null;
-   }
-
-   @Override
-   public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
+   public boolean isRepairInProgress(Buff buffInstance, FleetMemberAPI repairTarget) {
+      return repairTarget != null && buffInstance != null
+            && repairTarget.getBuffManager().getBuff(BONUS_ID) == buffInstance
+            && !buffInstance.isExpired();
    }
 
    public Map<FleetMemberAPI, State> state = new WeakHashMap<FleetMemberAPI, State>();
@@ -123,37 +143,85 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
       if (data == null) {
          State s = new State();
+         s.nextTriggerIn = DAYS_TO_TRIGGER;
          data = state.put(member, s);
          data = s;
       }
 
-      if (data.nextTriggerIn >= 0) {
+      if (data.nextTriggerIn > 0) {
          data.nextTriggerIn -= Global.getSector().getClock().convertToDays(amount);
          return;
       }
 
-      if (data.repairTarget != null && data.buffInstance != null && !data.buffInstance.isExpired()) {
-         data.nextTriggerIn = DAYS_TO_TRIGGER - data.nextTriggerIn;
+      if (isRepairInProgress(data.buffInstance, data.repairTarget)) {
+         data.nextTriggerIn = DAYS_TO_TRIGGER + data.nextTriggerIn;
          return;
       }
 
       FleetMemberAPI newRepairTarget = getValidRepairTarget(member);
-      if (newRepairTarget == null || newRepairTarget.getBuffManager().getBuff(BONUS_ID) != null) {
-         data.nextTriggerIn = DAYS_TO_TRIGGER - data.nextTriggerIn;
+      if (newRepairTarget == null) {
+         data.nextTriggerIn = DAYS_TO_TRIGGER + data.nextTriggerIn;
          return;
       }
 
-      // from here on we have valid data.repairTarget
       data.repairTarget = newRepairTarget;
 
       data.buffInstance = new RepairEquipmentBuff(member, data.repairTarget);
       data.repairTarget.getBuffManager().addBuffOnlyUpdateStat(data.buffInstance);
 
-      data.nextTriggerIn = DAYS_TO_TRIGGER - data.nextTriggerIn;
+      data.nextTriggerIn = DAYS_TO_TRIGGER + data.nextTriggerIn;
+   }
+
+   @Override
+   public String getDescriptionParam(int index, ShipAPI.HullSize hullSize) {
+      if (index == 0)
+         return "" + (int) Math.round((REPAIR_BONUS - 1F) * 100) + "%";
+      if (index == 1)
+         return "" + (int) Math.round(SUPPLIES_RECOVERY_BONUS * 100) + "%";
+      return null;
+   }
+
+   @Override
+   public boolean shouldAddDescriptionToTooltip(HullSize hullSize, ShipAPI ship, boolean isForModSpec) {
+      return true;
+   }
+
+   @Override
+   public void addPostDescriptionSection(TooltipMakerAPI tooltip, HullSize hullSize, ShipAPI ship, float width,
+         boolean isForModSpec) {
+      float pad = 3f;
+      float opad = 10f;
+      Color h = Misc.getHighlightColor();
+      Color bad = Misc.getNegativeHighlightColor();
+
+      State data = state.get(ship.getFleetMember());
+
+      if (isForModSpec || ship == null || data == null || Global.getSettings().getCurrentState() == GameState.TITLE) {
+         return;
+      }
+
+      if (isRepairInProgress(data.buffInstance, data.repairTarget)) {
+         tooltip.addPara("The ship is currently repairing %s. The cost is %s metals per day.", opad, h,
+               "" + data.repairTarget.getShipName(),
+               "" + (int) Math.round(RepairEquipmentBuff.getUsedMetalsPerDay(data.repairTarget.getStats())));
+      } else if (ship.getFleetMember().getFleetData().getFleet().getCargo().getCommodityQuantity(
+            Commodities.METALS) <= 0) {
+         tooltip.addPara("The ship is lacking metals for repair.", opad, h);
+      } else if (ship.getFleetMember().getRepairTracker().getCR() < MIN_CR) {
+         // impl/campaign/RepairGantry.java
+         LabelAPI label = tooltip.addPara("This ship's combat readiness is below %s " +
+               "and the repairs can not be conducted.",
+               opad, h,
+               "" + (int) Math.round(MIN_CR * 100f) + "%");
+         label.setHighlightColors(bad, h);
+         label.setHighlight("" + (int) Math.round(MIN_CR * 100f) + "%");
+      } else {
+         tooltip.addPara("The ship is not repairing anything currently.", opad, h);
+      }
    }
 
    @Override
    public boolean isApplicableToShip(ShipAPI ship) {
-      return true;
+      return false;
    }
 }
