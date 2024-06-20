@@ -76,8 +76,8 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    }
 
    public static class RepairEquipmentBuff implements Buff {
-      private static final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.METALS,
-            Commodities.SUPPLIES);
+      private static final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES,
+            Commodities.METALS);
       public static final float USAGE_TAX = 1.2F;
 
       public static float getUsedMetalsPerDay(MutableShipStatsAPI stats) {
@@ -93,7 +93,6 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
          this.repairTarget = repairTarget;
          this.repairShip = repairShip;
          this.metalsPerDay = getUsedMetalsPerDay(repairTarget.getStats());
-         // this.suppliesToFinishRepairs = repairTarget.getRepairTracker()
       }
 
       public boolean isExpired() {
@@ -110,13 +109,15 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
                REPAIR_BONUS);
       }
 
-      public void advance(float amount) {
+      // yes. this uses actual in-game days.
+      // no, I dont know why.
+      public void advance(float days) {
          if (!isValidForRepair(repairShip, repairTarget)) {
             expired = true;
             return;
          }
 
-         float metalsShouldUse = metalsPerDay * Global.getSector().getClock().convertToDays(amount);
+         float metalsShouldUse = metalsPerDay * days;
          CargoAPI cargo = repairShip.getFleetData().getFleet().getCargo();
          cargo.removeCommodity(Commodities.METALS, metalsShouldUse);
 
@@ -189,6 +190,11 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    @Override
    public void addPostDescriptionSection(TooltipMakerAPI tooltip, HullSize hullSize, ShipAPI ship, float width,
          boolean isForModSpec) {
+      if (Global.getSettings().getCurrentState() == GameState.TITLE || isForModSpec || ship == null
+            || ship.getFleetMember() == null) {
+         return;
+      }
+
       float pad = 3f;
       float opad = 10f;
       Color h = Misc.getHighlightColor();
@@ -196,7 +202,7 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
       State data = state.get(ship.getFleetMember());
 
-      if (isForModSpec || ship == null || data == null || Global.getSettings().getCurrentState() == GameState.TITLE) {
+      if (data == null) {
          return;
       }
 

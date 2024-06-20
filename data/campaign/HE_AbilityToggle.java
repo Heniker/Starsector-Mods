@@ -27,14 +27,11 @@ import com.fs.starfarer.api.util.Misc;
 
 import data.hullmods.HE_ImprovisedRefinery;
 
+/**
+ * Does nothing on it's own, but state of this ability is used to control
+ * ImprovisedRefinery hullmod for player
+ */
 public class HE_AbilityToggle extends BaseToggleAbility {
-
-	public static float SLIPSTREAM_DETECTION_RANGE = 20000f;
-
-	public static String COMMODITY_ID = Commodities.VOLATILES;
-	public static float COMMODITY_PER_DAY = 1f;
-
-	public static float DETECTABILITY_PERCENT = 50f;
 
 	@Override
 	protected void applyEffect(float arg0, float arg1) {
@@ -58,12 +55,10 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 
 	@Override
 	protected void activateImpl() {
-		HE_ImprovisedRefinery.EnabledForPlayerFleet = true;
 	}
 
 	@Override
 	protected void deactivateImpl() {
-		HE_ImprovisedRefinery.EnabledForPlayerFleet = false;
 	}
 
 	@Override
@@ -94,20 +89,20 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 		int oreProcessedPerDay = 0;
 		for (FleetMemberAPI member : fleetMemebers) {
 			oreProcessedPerDay += member.getVariant().hasHullMod("HE_ImprovisedRefinery")
-					? HE_ImprovisedRefinery.getConversionRate(member,
+					? HE_ImprovisedRefinery.getConversionRatePerDay(member,
 							Global.getSettings().getHullModSpec("HE_ImprovisedRefinery"))
 					: 0;
 		}
 		;
 
-		tooltip.addPara("Toggles Ore Refinery hullmod for all your ships. ",
+		tooltip.addPara("Toggles Ore Refinery hullmod for all ships.",
 				pad);
 
 		tooltip.addPara(
-				"Your refineries are capable of converting %s Ore into %s Rare Ore per day.",
+				"Your refineries are capable of converting %s Ore into %s Metals per day.",
 				pad, highlight,
 				"" + (int) oreProcessedPerDay,
-				"" + HE_ImprovisedRefinery.getRecievedRareOre(fleet.getFleetData().getFleet().getFlagship(),
+				"" + HE_ImprovisedRefinery.getRecievedMetals(fleet.getFleetData().getFleet().getFlagship(),
 						oreProcessedPerDay));
 
 		// tooltip.addPara("Increases the range at which the fleet can be detected by

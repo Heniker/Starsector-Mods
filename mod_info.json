@@ -3,7 +3,7 @@
   "name": "ImprovisedRefinery",
   "author": "heniker",
   "version": "0.0.1",
-  "description": "Hullmod that converts Ore into Rare Ore",
+  "description": "Convert Ore into Metals",
   "gameVersion": "0.97a",
   "jars": ["build/dist/ImprovisedRefinery.jar"],
   "modPlugin": "data.scripts.HE_ModPlugin"
