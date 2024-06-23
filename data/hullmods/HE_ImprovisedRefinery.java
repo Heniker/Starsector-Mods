@@ -4,24 +4,23 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoAPI.CargoItemType;
-import com.fs.starfarer.api.campaign.FleetDataAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
-import com.fs.starfarer.api.combat.BaseHullMod;
 import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.combat.ShipAPI.HullSize;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import data.MyMisc;
 
 public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
+   public static final String ID = "HE_ImprovisedRefinery";
+   // space out updates to prevent lot's recalculations for in-game stuff & better
+   // compitability w/ other mods. Set to 0 for insta updates
    public static final float DAYS_TO_TRIGGER = 0.2F;
 
    public static final String COMMODITY_FROM = Commodities.ORE;
@@ -34,17 +33,19 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    public static final float SMOD_BONUS_RATE = 1.4F;
    public static final float NANOFORGE_BONUS_RATE = 1.5F;
 
-   // hack to allow ability toggle to work
    public static boolean getEnabledForPlayerFleet() {
-      return Global.getSector().getPlayerFleet().getAbility("HE_AbilityToggle")
-            .isActive();
+      return Global.getSector().getPlayerFleet() != null
+            && Global.getSector().getPlayerFleet().getAbility("HE_AbilityToggle") != null &&
+            Global.getSector().getPlayerFleet().getAbility("HE_AbilityToggle").isActive();
    }
 
    public static float getConversionRatePerDay(FleetMemberAPI member, HullModSpecAPI spec) {
       float conversionRate = BASE_CONVERSION_SPEED;
       CargoAPI cargo = member.getFleetData().getFleet().getCargo();
 
-      if (cargo.getQuantity(CargoItemType.SPECIAL,
+      if (cargo == null) {
+         conversionRate *= member.getRepairTracker().getCR();
+      } else if (cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1) {
          conversionRate *= NANOFORGE_BONUS_RATE;
       } else if (cargo.getQuantity(CargoItemType.SPECIAL,
@@ -52,11 +53,9 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
          conversionRate *= NANOFORGE_BONUS_RATE;
          conversionRate *= member.getRepairTracker().getCR();
-      } else {
-         conversionRate *= member.getRepairTracker().getCR();
       }
 
-      if (MyMisc.isSMod(member.getStats(), spec)) {
+      if (MyMisc.isSMod(member, spec)) {
          conversionRate *= SMOD_BONUS_RATE;
       }
 
@@ -64,9 +63,12 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    }
 
    public static float getRecievedMetals(FleetMemberAPI member, float usedOre) {
-      float tax = member.getFleetData().getFleet().getCargo().getQuantity(CargoItemType.SPECIAL,
+      CargoAPI cargo = member.getFleetData().getFleet().getCargo();
+
+      float tax = cargo != null ? cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1 ? CONVERSION_TAX + PRISTINE_N_TAX_BONUS_FLAT
-                  : CONVERSION_TAX;
+                  : CONVERSION_TAX
+            : 0;
 
       return MyMisc.round(BASE_CONVERSION_RATIO * usedOre * tax, 2);
    }
@@ -81,16 +83,16 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    @Override
    public String getSModDescriptionParam(int index, ShipAPI.HullSize hullSize) {
       if (index == 0)
-         return "" + (int) Math.round(SMOD_BONUS_RATE * 100) + "%";
+         return "" + (int) Math.round((1f - SMOD_BONUS_RATE) * 100) + "%";
       return null;
    }
 
-   class State {
-      public float nextTriggerIn;
+   public static class State {
+      public float daysSinceLastTrigger;
       public boolean isInPlayerFleet;
    }
 
-   public Map<FleetMemberAPI, State> state = new WeakHashMap<FleetMemberAPI, State>();
+   public static Map<FleetMemberAPI, State> state = new WeakHashMap<FleetMemberAPI, State>();
 
    @Override
    public void advanceInCampaign(FleetMemberAPI member, float amount) {
@@ -99,30 +101,36 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
       if (data == null) {
          State s = new State();
          s.isInPlayerFleet = isInPlayerFleet(member.getStats());
-         s.nextTriggerIn = DAYS_TO_TRIGGER;
+         s.daysSinceLastTrigger = 0;
          data = state.put(member, s);
          data = s;
       }
+
+      data.daysSinceLastTrigger += Global.getSector().getClock().convertToDays(amount);
+
+      if (data.daysSinceLastTrigger > DAYS_TO_TRIGGER && amount != 0) {
+         return;
+      }
+
+      float days = data.daysSinceLastTrigger;
+      data.daysSinceLastTrigger = 0;
 
       if (data.isInPlayerFleet && !getEnabledForPlayerFleet()) {
          return;
       }
 
-      if (data.nextTriggerIn > 0) {
-         data.nextTriggerIn -= Global.getSector().getClock().convertToDays(amount);
-         return;
-      }
-
-      data.nextTriggerIn = DAYS_TO_TRIGGER + data.nextTriggerIn;
-
       float hasOre = member.getFleetData().getFleet().getCargo().getCommodityQuantity(COMMODITY_FROM);
-      float usedOre = getConversionRatePerDay(member, this.spec) * DAYS_TO_TRIGGER;
+      float usedOre = getConversionRatePerDay(member, this.spec) * days;
 
-      if (hasOre > 0) {
-         CargoAPI cargo = member.getFleetData().getFleet().getCargo();
+      CargoAPI cargo = member.getFleetData().getFleet().getCargo();
+      if (hasOre > usedOre) {
          cargo.removeCommodity(COMMODITY_FROM, usedOre);
          cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, usedOre));
+      } else {
+         cargo.removeCommodity(COMMODITY_FROM, hasOre);
+         cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, hasOre));
       }
+
    }
 
    @Override

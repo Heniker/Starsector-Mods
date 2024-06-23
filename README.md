@@ -21,7 +21,7 @@ During development mod should be placed in starsector mods folder.
 For debugging add following to `vmparams` file in starsector directory:
 
 ```
--Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8015,suspend=y
+-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8015,suspend=n
 ```
 
 Then launch VSCode "attach" debug configuration.
@@ -33,14 +33,15 @@ Mod is 80% done;
 
 TODO:
 Test SMod ratios.
+Test nanoforge
 
-Test multiple crigs in fleet
-Test Ore Conversion
 Add icons for hullmods and ability
 ?Add post description for ImprovisedRefinery
 ?Add mod settings
 
 TODONE:
+Test Ore Conversion
+Test multiple crigs in fleet
 Add integration with Corrupted Nanoforge, Prestine Nanoforge.
 
 ---

@@ -15,8 +15,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 
 public class MyMisc {
+  public static boolean isSMod(FleetMemberAPI member, HullModSpecAPI spec) {
+    return member == null ? false : isSMod(member.getStats(), spec);
+  }
+
   public static boolean isSMod(MutableShipStatsAPI stats, HullModSpecAPI spec) {
-    if (stats != null && stats.getVariant() != null && spec != null) {
+    if (stats != null && spec != null && stats.getVariant() != null) {
       return stats.getVariant().getSMods().contains(spec.getId())
           || stats.getVariant().getSModdedBuiltIns().contains(spec.getId());
     } else {
@@ -45,11 +49,11 @@ public class MyMisc {
   }
 
   // combat/BaseHullMod.java:270
-  public boolean isInPlayerFleet(ShipAPI ship) {
+  public static boolean isInPlayerFleet(FleetMemberAPI ship) {
     return isInFleet(Global.getSector().getPlayerFleet().getFleetData(), ship);
   }
 
-  public boolean isInFleet(FleetDataAPI fleetData, ShipAPI ship) {
+  public static boolean isInFleet(FleetDataAPI fleetData, FleetMemberAPI ship) {
     if (fleetData == null || ship == null) {
       return false;
     }

@@ -32,6 +32,7 @@ import data.hullmods.HE_ImprovisedRefinery;
  * ImprovisedRefinery hullmod for player
  */
 public class HE_AbilityToggle extends BaseToggleAbility {
+	public static final String ID = "HE_AbilityToggle";
 
 	@Override
 	protected void applyEffect(float arg0, float arg1) {

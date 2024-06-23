@@ -4,7 +4,7 @@ shopt -s extglob globstar
 
 BUILD_DIR=$(realpath $(dirname "$0"))
 W_DIR=$(realpath "$BUILD_DIR/..")
-STARSECTOR_CORE_DIR=$(realpath $W_DIR/../../starsector-core)
+STARSECTOR_CORE_DIR=$(realpath "$W_DIR/../../starsector-core")
 
 FILE_NAME="ImprovisedRefinery"
 
@@ -40,7 +40,7 @@ mkdir dist
 rm -rf tmp
 mkdir tmp
 
-SOURCE_FILES="$W_DIR"/data/**/*.java
+SOURCE_FILES="$W_DIR/data/**/*.java"
 
 javac -source 1.7 -target 1.7 -cp "$STARSECTOR_CORE_DIR/starfarer.api.jar":"$STARSECTOR_CORE_DIR/lwjgl.jar":"$STARSECTOR_CORE_DIR/lwjgl_util.jar":"$STARSECTOR_CORE_DIR/xstream-1.4.10.jar":"$STARSECTOR_CORE_DIR/log4j-1.2.9.jar" $SOURCE_FILES -d tmp
 
@@ -62,7 +62,7 @@ cd "$W_DIR"
 
 cat mod_info.json | sed -e "s/build\/dist\///" >build/dist/mod_info.json
 
-CSV_FILES="$W_DIR"/data/**/!(*.java)
+CSV_FILES="$W_DIR/data/**/!(*.java)"
 
 for i in $CSV_FILES; do
   cp $(realpath -s --relative-to="$W_DIR" "$i") ./build/dist --parents -r

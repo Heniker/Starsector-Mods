@@ -3,6 +3,7 @@
   "java.project.exportJar.targetPath": "${workspaceFolder}/data/jars/ImprovisedRefinery.jar",
   "java.project.referencedLibraries": [
     "..\\..\\starsector-core\\starfarer.api.jar",
+    "..\\..\\starsector-core\\starfarer_obf.jar",
     "..\\..\\starsector-core\\lwjgl.jar",
     "..\\..\\starsector-core\\lwjgl_util.jar",
     "..\\..\\starsector-core\\xstream-1.4.10.jar",
