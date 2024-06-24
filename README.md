@@ -38,6 +38,7 @@ Test nanoforge
 Add icons for hullmods and ability
 ?Add post description for ImprovisedRefinery
 ?Add mod settings
+Add detection range increase while refinery is active
 
 TODONE:
 Test Ore Conversion

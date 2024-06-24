@@ -17,7 +17,6 @@ import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import data.MyMisc;
 

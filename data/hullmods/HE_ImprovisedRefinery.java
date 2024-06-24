@@ -13,7 +13,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import data.MyMisc;
 
@@ -44,14 +43,18 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
       CargoAPI cargo = member.getFleetData().getFleet().getCargo();
 
       if (cargo == null) {
-         conversionRate *= member.getRepairTracker().getCR();
-      } else if (cargo.getQuantity(CargoItemType.SPECIAL,
+         return conversionRate;
+      }
+
+      if (cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1) {
          conversionRate *= NANOFORGE_BONUS_RATE;
       } else if (cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.CORRUPTED_NANOFORGE, null)) >= 1) {
 
          conversionRate *= NANOFORGE_BONUS_RATE;
+         conversionRate *= member.getRepairTracker().getCR();
+      } else {
          conversionRate *= member.getRepairTracker().getCR();
       }
 
@@ -83,7 +86,7 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    @Override
    public String getSModDescriptionParam(int index, ShipAPI.HullSize hullSize) {
       if (index == 0)
-         return "" + (int) Math.round((1f - SMOD_BONUS_RATE) * 100) + "%";
+         return "" + (int) Math.round((SMOD_BONUS_RATE - 1f) * 100) + "%";
       return null;
    }
 
