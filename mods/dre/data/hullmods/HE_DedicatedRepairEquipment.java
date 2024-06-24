@@ -1,4 +1,4 @@
-package data.hullmods;
+package mods.dre.data.hullmods;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -18,7 +18,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-import data.MyMisc;
+import mods.common.MyMisc;
 
 /**
  * Hull mod that increases repair rate of a single ship and

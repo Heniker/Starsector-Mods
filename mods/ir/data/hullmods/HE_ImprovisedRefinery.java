@@ -1,4 +1,4 @@
-package data.hullmods;
+package mods.ir.data.hullmods;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -14,7 +14,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 
-import data.MyMisc;
+import mods.common.MyMisc;
 
 public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    public static final String ID = "HE_ImprovisedRefinery";

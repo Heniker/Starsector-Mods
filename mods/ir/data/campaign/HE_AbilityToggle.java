@@ -1,4 +1,4 @@
-package data.campaign;
+package mods.ir.data.campaign;
 
 import java.awt.Color;
 import java.util.EnumSet;
@@ -25,7 +25,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-import data.hullmods.HE_ImprovisedRefinery;
+import mods.ir.data.hullmods.HE_ImprovisedRefinery;
 
 /**
  * Does nothing on it's own, but state of this ability is used to control

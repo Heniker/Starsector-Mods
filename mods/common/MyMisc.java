@@ -1,4 +1,4 @@
-package data;
+package mods.common;
 
 import java.math.BigDecimal;
 import java.util.List;
