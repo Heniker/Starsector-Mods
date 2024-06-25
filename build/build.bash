@@ -3,7 +3,8 @@
 FILE_NAME="${1}"
 
 if [ -z "${1}" ]; then
-  echo "Argument should be any of the mod names"
+  ./build.bash dre
+  ./build.bash ir
   exit
 fi
 

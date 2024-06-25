@@ -32,7 +32,6 @@ Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.z
 Mod is 80% done;
 
 TODO:
-Test SMod ratios.
 Test nanoforge
 
 Add icons for hullmods and ability
@@ -41,6 +40,8 @@ Add icons for hullmods and ability
 Add detection range increase while refinery is active
 
 TODONE:
+Test SMod ratios.
+check smod save on Ir 
 Test Ore Conversion
 Test multiple crigs in fleet
 Add integration with Corrupted Nanoforge, Prestine Nanoforge.

@@ -7,7 +7,9 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoAPI.CargoItemType;
 import com.fs.starfarer.api.campaign.SpecialItemData;
+import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
+import com.fs.starfarer.api.combat.ShipAPI.HullSize;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
@@ -122,16 +124,19 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
          return;
       }
 
-      float hasOre = member.getFleetData().getFleet().getCargo().getCommodityQuantity(COMMODITY_FROM);
-      float usedOre = getConversionRatePerDay(member, this.spec) * days;
+      try {
+         float hasOre = member.getFleetData().getFleet().getCargo().getCommodityQuantity(COMMODITY_FROM);
+         float usedOre = getConversionRatePerDay(member, this.spec) * days;
 
-      CargoAPI cargo = member.getFleetData().getFleet().getCargo();
-      if (hasOre > usedOre) {
-         cargo.removeCommodity(COMMODITY_FROM, usedOre);
-         cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, usedOre));
-      } else {
-         cargo.removeCommodity(COMMODITY_FROM, hasOre);
-         cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, hasOre));
+         CargoAPI cargo = member.getFleetData().getFleet().getCargo();
+         if (hasOre > usedOre) {
+            cargo.removeCommodity(COMMODITY_FROM, usedOre);
+            cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, usedOre));
+         } else {
+            cargo.removeCommodity(COMMODITY_FROM, hasOre);
+            cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, hasOre));
+         }
+      } catch (NullPointerException err) {
       }
 
    }
@@ -139,5 +144,19 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    @Override
    public boolean isApplicableToShip(ShipAPI ship) {
       return super.isApplicableToShip(ship) && ship.isCapital();
+   }
+
+   @Override
+   public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
+      FleetMemberAPI member = stats.getFleetMember();
+      State data = state.get(member);
+
+      if (data == null) {
+         State s = new State();
+         s.isInPlayerFleet = isInPlayerFleet(stats);
+         s.daysSinceLastTrigger = 0;
+         data = state.put(member, s);
+         data = s;
+      }
    }
 }

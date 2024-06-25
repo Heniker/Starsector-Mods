@@ -20,6 +20,7 @@ public class HE_ModPlugin extends BaseModPlugin {
 
     public static final String ABILITY_ENABLED = "$" + HE_AbilityToggle.ID + ".isActive";
     public static final String REFINERY_SHIPS = "$" + HE_ImprovisedRefinery.ID + ".ships";
+    public static final String REFINERY_S_MOD_SHIPS = "$" + HE_ImprovisedRefinery.ID + ".smodships";
 
     @Override
     public void afterGameSave() {
@@ -27,8 +28,16 @@ public class HE_ModPlugin extends BaseModPlugin {
 
         try {
             for (FleetMemberAPI it : (Set<FleetMemberAPI>) persist.get(REFINERY_SHIPS)) {
-                if (it != null && it.getVariant() != null) {
+                try {
                     it.getVariant().addMod(HE_ImprovisedRefinery.ID);
+                } catch (NullPointerException err) {
+                }
+            }
+
+            for (FleetMemberAPI it : (Set<FleetMemberAPI>) persist.get(REFINERY_S_MOD_SHIPS)) {
+                try {
+                    it.getVariant().addPermaMod(HE_ImprovisedRefinery.ID, true);
+                } catch (NullPointerException err) {
                 }
             }
         } catch (NullPointerException err) {
@@ -56,14 +65,30 @@ public class HE_ModPlugin extends BaseModPlugin {
         MemoryAPI persist = Global.getSector().getMemory();
 
         persist.unset(REFINERY_SHIPS);
-        // this prevernts the game from saving excess information
-        persist.set(REFINERY_SHIPS, new HashSet(HE_ImprovisedRefinery.state.keySet()));
+        persist.unset(REFINERY_S_MOD_SHIPS);
 
+        HashSet<FleetMemberAPI> refineryShips = new HashSet<FleetMemberAPI>();
+        HashSet<FleetMemberAPI> refinerySModShips = new HashSet<FleetMemberAPI>();
         for (FleetMemberAPI it : HE_ImprovisedRefinery.state.keySet()) {
-            it.getVariant().getHullMods().remove(HE_ImprovisedRefinery.ID);
-            it.getVariant().removeMod(HE_ImprovisedRefinery.ID);
-            it.getVariant().removePermaMod(HE_ImprovisedRefinery.ID);
+            try {
+                if (it.getVariant().getPermaMods().contains(HE_ImprovisedRefinery.ID)) {
+                    refinerySModShips.add(it);
+                } else {
+                    refineryShips.add(it);
+                }
+            } catch (NullPointerException err) {
+            }
+
+            try {
+                it.getVariant().getHullMods().remove(HE_ImprovisedRefinery.ID);
+                it.getVariant().removeMod(HE_ImprovisedRefinery.ID);
+                it.getVariant().removePermaMod(HE_ImprovisedRefinery.ID);
+            } catch (NullPointerException err) {
+            }
         }
+
+        persist.set(REFINERY_SHIPS, refineryShips);
+        persist.set(REFINERY_S_MOD_SHIPS, refinerySModShips);
 
         try {
             persist.set(ABILITY_ENABLED,

@@ -3,6 +3,8 @@ package mods.dre.data.hullmods;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.apache.log4j.Logger;
+
 import java.awt.Color;
 import com.fs.starfarer.api.GameState;
 import com.fs.starfarer.api.Global;
@@ -25,6 +27,7 @@ import mods.common.MyMisc;
  * reduces supply consumption during CR recovery at the cost of metals
  */
 public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
+   public static Logger log = Global.getLogger(HE_DedicatedRepairEquipment.class);
    public static final String ID = "HE_DedicatedRepairEquipment";
 
    public static final float DAYS_TO_TRIGGER = 0.3F;
@@ -49,9 +52,11 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
             && !repairTarget.getRepairTracker().isCrashMothballed();
    }
 
-   public static FleetMemberAPI getValidRepairTarget(FleetMemberAPI member) {
+   public static FleetMemberAPI getNewRepairTarget(FleetMemberAPI member) {
       for (FleetMemberAPI it : member.getFleetData().getMembersInPriorityOrder()) {
-         if (isValidForRepair(member, it)) {
+         if (isValidForRepair(member, it)
+               && (it.getBuffManager().getBuff(RepairEquipmentBuff.BUFF_ID) == null
+                     || it.getBuffManager().getBuff(RepairEquipmentBuff.BUFF_ID).isExpired())) {
             return it;
          }
       }
@@ -148,7 +153,7 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
          return;
       }
 
-      FleetMemberAPI newRepairTarget = getValidRepairTarget(member);
+      FleetMemberAPI newRepairTarget = getNewRepairTarget(member);
       if (newRepairTarget == null) {
          return;
       }
@@ -214,6 +219,19 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
    @Override
    public boolean isApplicableToShip(ShipAPI ship) {
-      return true;
+      return false;
+   }
+
+   @Override
+   public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
+      FleetMemberAPI member = stats.getFleetMember();
+      State data = state.get(member);
+
+      if (data == null) {
+         State s = new State();
+         s.daysSinceLastTrigger = 0;
+         data = state.put(member, s);
+         data = s;
+      }
    }
 }
