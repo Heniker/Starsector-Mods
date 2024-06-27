@@ -1,5 +1,5 @@
 _
 build
-!build/build.bash
+!/build/build.bash
 tmp
 *.jar
