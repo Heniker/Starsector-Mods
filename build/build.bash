@@ -8,35 +8,12 @@ if [ -z "${1}" ]; then
   exit
 fi
 
-BUILD_DIR=$(realpath $(dirname "${0}"))
-OUT_DIR=$(realpath "${BUILD_DIR}/${FILE_NAME}")
-W_DIR=$(realpath "${BUILD_DIR}/../mods/${FILE_NAME}")
-COMMON_DIR=$(realpath "${W_DIR}/../common")
-STARSECTOR_CORE_DIR=$(realpath "${BUILD_DIR}/../../../starsector-core")
-
-if [ ! -d "${W_DIR}" ]; then
-  echo "${W_DIR}" does not exist
-  exit
-fi
-
-if [ ! -d "${STARSECTOR_CORE_DIR}" ]; then
-  echo "${STARSECTOR_CORE_DIR}" does not exist
-  exit
-fi
-
-if [ ! -d "${BUILD_DIR}" ]; then
-  echo "${BUILD_DIR}" does not exist
-  exit
-fi
-
-echo Dirs:
-echo working - "${W_DIR}"
-echo starsectore-core - "${STARSECTOR_CORE_DIR}"
-echo build - "${BUILD_DIR}"
-echo
-echo Javac version:
-javac -version
-echo
+readonly BUILD_DIR=$(realpath $(dirname "${0}"))
+readonly OUT_DIR=$(realpath "${BUILD_DIR}/${FILE_NAME}")
+readonly W_DIR=$(realpath "${BUILD_DIR}/../mods/${FILE_NAME}")
+readonly COMMON_DIR=$(realpath "${W_DIR}/../common")
+readonly STARSECTOR_CORE_DIR=$(realpath "${BUILD_DIR}/../../../starsector-core")
+readonly STARSECTOR_MOD_DIR=$(realpath "${STARSECTOR_CORE_DIR}/../mods/${FILE_NAME}")
 
 # ---
 
@@ -54,8 +31,6 @@ jar cf "${FILE_NAME}.jar" -C tmp .
 
 rm -rf tmp
 
-# optional
-
 cd "${W_DIR}"
 
 cp mod_info.json ${OUT_DIR}/mod_info.json
@@ -65,6 +40,11 @@ CSV_FILES=$(find ${W_DIR} -type f -not -name "*.java")
 for i in $CSV_FILES; do
   cp $(realpath -s --relative-to="${W_DIR}" "$i") "${OUT_DIR}" --parents -r
 done
+
+cd "${BUILD_DIR}"
+rm -rf "${STARSECTOR_MOD_DIR}"
+mkdir "${STARSECTOR_MOD_DIR}"
+cp -r "${FILE_NAME}"/* "${STARSECTOR_MOD_DIR}"
 
 echo
 echo Fin
