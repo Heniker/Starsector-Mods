@@ -3,6 +3,8 @@ package mods.ir.data.hullmods;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.apache.log4j.Logger;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CargoAPI.CargoItemType;
@@ -28,11 +30,14 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    public static final String COMMODITY_TO = Commodities.METALS;
    public static final float CONVERSION_TAX = 0.75F;
    public static final float PRISTINE_N_TAX_BONUS_FLAT = 0.1F;
-   public static final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(COMMODITY_FROM,
-         COMMODITY_TO);
    public static final float BASE_CONVERSION_SPEED = 72; // units per day
    public static final float SMOD_BONUS_RATE = 1.4F;
    public static final float NANOFORGE_BONUS_RATE = 1.5F;
+
+   // Industrial Evolution crashes if this is declared as static
+   public final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(COMMODITY_FROM,
+         COMMODITY_TO);
+         
 
    public static boolean getEnabledForPlayerFleet() {
       return Global.getSector().getPlayerFleet() != null
@@ -67,7 +72,7 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
       return conversionRate;
    }
 
-   public static float getRecievedMetals(FleetMemberAPI member, float usedOre) {
+   public float getRecievedMetals(FleetMemberAPI member, float usedOre) {
       CargoAPI cargo = member.getFleetData().getFleet().getCargo();
 
       float tax = cargo != null ? cargo.getQuantity(CargoItemType.SPECIAL,

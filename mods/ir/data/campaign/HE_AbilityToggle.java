@@ -25,6 +25,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import mods.common.MyMisc;
 import mods.ir.data.hullmods.HE_ImprovisedRefinery;
 
 /**
@@ -103,7 +104,8 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 				"Your refineries are capable of converting %s Ore into %s Metals per day.",
 				pad, highlight,
 				"" + (int) oreProcessedPerDay,
-				"" + HE_ImprovisedRefinery.getRecievedMetals(fleet.getFleetData().getFleet().getFlagship(),
+				"" + ((HE_ImprovisedRefinery) MyMisc.getHullMod(HE_ImprovisedRefinery.ID)).getRecievedMetals(
+						fleet.getFleetData().getFleet().getFlagship(),
 						oreProcessedPerDay));
 
 		// tooltip.addPara("Increases the range at which the fleet can be detected by
