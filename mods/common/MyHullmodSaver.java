@@ -7,6 +7,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
@@ -102,6 +103,8 @@ public class MyHullmodSaver {
     HashSet<String> sModdedShips = new HashSet<String>();
     HashSet<String> builtinMods = new HashSet<String>();
 
+    HashSet<ShipHullSpecAPI> cleanupHullSpecs = new HashSet<ShipHullSpecAPI>();
+
     for (FleetMemberAPI it : members) {
       if (it == null || it.getVariant() == null || it.getHullSpec() == null) {
         continue;
@@ -114,6 +117,7 @@ public class MyHullmodSaver {
 
       if (it.getHullSpec().getBuiltInMods().contains(modId)) {
         builtinMods.add(it.getId());
+        cleanupHullSpecs.add(it.getHullSpec());
       }
 
       if (it.getVariant().getSuppressedMods().contains(modId)) {
@@ -124,11 +128,13 @@ public class MyHullmodSaver {
         moddedShips.add(it.getId());
       }
 
-      it.getHullSpec().getBuiltInMods().remove(modId);
       it.getVariant().getHullMods().remove(modId);
       it.getVariant().removeMod(modId);
       it.getVariant().removePermaMod(modId);
+    }
 
+    for (ShipHullSpecAPI it : cleanupHullSpecs) {
+      it.getBuiltInMods().remove(modId);
     }
 
     persist.unset(getStoreKey(StoreKeys.fleet, modId));

@@ -48,6 +48,7 @@ cp "${W_DIR}/mod_info.json" "${OUT_DIR}/mod_info.json"
 
 CSV_FILES=$(find ${W_DIR} -type f -not -name "*.java")
 
+cd ${W_DIR}
 for i in $CSV_FILES; do
   cp $(realpath -s --relative-to="${W_DIR}" "$i") "${OUT_DIR}" --parents -r
 done

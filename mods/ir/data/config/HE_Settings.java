@@ -23,23 +23,13 @@ public class HE_Settings {
     return false;
   }
 
-  static public float getConversionRatio() {
-    if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
-      Float r = LunaSettings.getFloat(modId, "CONVERSION_RATIO");
-      if (r != null) {
-        return r;
-      }
-    }
-    return MyMisc.getCommodityConversionRatio(getCommodityFrom(), getCommodityTo());
-  }
-
   static public String getCommodityFrom() {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       return LunaSettings.getString(modId, "COMMODITY_FROM");
     }
     return Commodities.ORE;
   }
-  
+
   static public String getCommodityTo() {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       return LunaSettings.getString(modId, "COMMODITY_TO");

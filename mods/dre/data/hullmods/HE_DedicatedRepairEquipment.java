@@ -39,7 +39,8 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    public static final float MIN_CR = 0.1F;
    public static final String COMMODITY_USED = HE_Settings.getCommodityUsed();
    private static final float USAGE_TAX = HE_Settings.getUsageTax();
-   private final float BASE_CONVERSION_RATIO = HE_Settings.getConversionRatio();
+
+   private final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES, HE_Settings.getCommodityUsed());
 
    public static boolean isValidForRepair(FleetMemberAPI repairShip, FleetMemberAPI repairTarget) {
       return repairShip != null && repairTarget != null && repairTarget != repairShip
@@ -74,10 +75,11 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
             && !buffInstance.isExpired();
    }
 
-   public static class RepairEquipmentBuff implements Buff {
-      public static float getUsedMetalsPerDay(MutableShipStatsAPI stats) {
-         return MyMisc.round(MyMisc.getRecoverySuppliesPerDay(stats) * BASE_CONVERSION_RATIO * USAGE_TAX, 2);
-      }
+   public float getUsedMetalsPerDay(MutableShipStatsAPI stats) {
+      return MyMisc.round(MyMisc.getRecoverySuppliesPerDay(stats) * BASE_CONVERSION_RATIO * USAGE_TAX, 2);
+   }
+
+   public class RepairEquipmentBuff implements Buff {
 
       public boolean expired = false;
       private FleetMemberAPI repairTarget;
@@ -200,7 +202,7 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
       if (isRepairInProgress(data.buffInstance, data.repairTarget)) {
          tooltip.addPara("The ship is currently repairing %s. The cost is %s " + COMMODITY_USED + " per day.", opad, h,
                "" + data.repairTarget.getShipName(),
-               "" + (int) Math.round(RepairEquipmentBuff.getUsedMetalsPerDay(data.repairTarget.getStats())));
+               "" + (int) Math.round(getUsedMetalsPerDay(data.repairTarget.getStats())));
       } else if (ship.getFleetMember().getFleetData().getFleet().getCargo().getCommodityQuantity(
             COMMODITY_USED) < 1) {
          tooltip.addPara("The ship is lacking " + COMMODITY_USED + " for repair.", opad, h);
@@ -224,6 +226,14 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
    @Override
    public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
-      advanceInCampaign(stats.getFleetMember(), 0);
+      FleetMemberAPI member = stats.getFleetMember();
+      State data = state.get(member);
+
+      if (data == null) {
+         State s = new State();
+         s.daysSinceLastTrigger = 0;
+         data = state.put(member, s);
+         data = s;
+      }
    }
 }

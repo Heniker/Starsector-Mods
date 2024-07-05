@@ -40,7 +40,7 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    public static final float NANOFORGE_BONUS_RATE = HE_Settings.getNanoforgeBonusRate();
 
    // Industrial Evolution crashes if this is declared as static
-   public final float BASE_CONVERSION_RATIO = HE_Settings.getConversionRatio();
+   public final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(HE_Settings.getCommodityFrom(), HE_Settings.getCommodityTo());
 
    public static boolean getEnabledForPlayerFleet() {
       return Global.getSector().getPlayerFleet() != null
@@ -163,16 +163,15 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
    @Override
    public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
-      advanceInCampaign(stats.getFleetMember(), 0);
-      // FleetMemberAPI member = stats.getFleetMember();
-      // State data = state.get(member);
+      FleetMemberAPI member = stats.getFleetMember();
+      State data = state.get(member);
 
-      // if (data == null) {
-      // State s = new State();
-      // s.isInPlayerFleet = isInPlayerFleet(stats);
-      // s.daysSinceLastTrigger = 0;
-      // data = state.put(member, s);
-      // data = s;
-      // }
+      if (data == null) {
+         State s = new State();
+         s.isInPlayerFleet = isInPlayerFleet(stats);
+         s.daysSinceLastTrigger = 0;
+         data = state.put(member, s);
+         data = s;
+      }
    }
 }

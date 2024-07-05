@@ -50,14 +50,4 @@ public class HE_Settings {
     }
     return Commodities.METALS;
   }
-
-  public static float getConversionRatio() {
-    if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
-      Float r = LunaSettings.getFloat(modId, "CONVERSION_RATIO");
-      if (r != null) {
-        return r;
-      }
-    }
-    return MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES, getCommodityUsed());
-  }
 }
