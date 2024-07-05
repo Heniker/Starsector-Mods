@@ -21,27 +21,32 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 import mods.common.MyMisc;
+import mods.dre.data.config.HE_Settings;
 
 /**
- * Hull mod that increases repair rate of a single ship and
+ * Hullmod that increases repair rate of a single ship and
  * reduces supply consumption during CR recovery at the cost of metals
  */
 public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    public static Logger log = Global.getLogger(HE_DedicatedRepairEquipment.class);
    public static final String ID = "HE_DedicatedRepairEquipment";
+   public static final String BUFF_ID = "repair_equipment_bonus";
 
-   public static final float DAYS_TO_TRIGGER = 0.3F;
+   public static final float DAYS_TO_TRIGGER = HE_Settings.getDaysToTrigger();
 
-   public static final float REPAIR_BONUS = 1.5F;
-   public static final float SUPPLIES_RECOVERY_BONUS = 0.5F;
+   public static final float REPAIR_BONUS = HE_Settings.getRepairBonus();
+   public static final float SUPPLIES_RECOVERY_BONUS = HE_Settings.getSuppliesRecoveryBonus();
    public static final float MIN_CR = 0.1F;
+   public static final String COMMODITY_USED = HE_Settings.getCommodityUsed();
+   private static final float USAGE_TAX = HE_Settings.getUsageTax();
+   private final float BASE_CONVERSION_RATIO = HE_Settings.getConversionRatio();
 
    public static boolean isValidForRepair(FleetMemberAPI repairShip, FleetMemberAPI repairTarget) {
       return repairShip != null && repairTarget != null && repairTarget != repairShip
             && repairShip.getFleetData() != null
             && repairShip.getFleetData().getFleet() != null
             && repairShip.getFleetData().getFleet().getCargo().getCommodityQuantity(
-                  Commodities.METALS) > 0
+                  COMMODITY_USED) > 0
             && repairShip.getRepairTracker().getCR() >= MIN_CR
             && !repairShip.getRepairTracker().isSuspendRepairs()
             && MyMisc.isInFleet(repairShip.getFleetData(), repairTarget)
@@ -55,8 +60,8 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    public static FleetMemberAPI getNewRepairTarget(FleetMemberAPI member) {
       for (FleetMemberAPI it : member.getFleetData().getMembersInPriorityOrder()) {
          if (isValidForRepair(member, it)
-               && (it.getBuffManager().getBuff(RepairEquipmentBuff.BUFF_ID) == null
-                     || it.getBuffManager().getBuff(RepairEquipmentBuff.BUFF_ID).isExpired())) {
+               && (it.getBuffManager().getBuff(BUFF_ID) == null
+                     || it.getBuffManager().getBuff(BUFF_ID).isExpired())) {
             return it;
          }
       }
@@ -65,16 +70,11 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
    public static boolean isRepairInProgress(Buff buffInstance, FleetMemberAPI repairTarget) {
       return repairTarget != null && buffInstance != null
-            && repairTarget.getBuffManager().getBuff(RepairEquipmentBuff.BUFF_ID) == buffInstance
+            && repairTarget.getBuffManager().getBuff(BUFF_ID) == buffInstance
             && !buffInstance.isExpired();
    }
 
    public static class RepairEquipmentBuff implements Buff {
-      public static final String BUFF_ID = "repair_equipment_bonus";
-      private static final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES,
-            Commodities.METALS);
-      private static final float USAGE_TAX = 1.2F;
-
       public static float getUsedMetalsPerDay(MutableShipStatsAPI stats) {
          return MyMisc.round(MyMisc.getRecoverySuppliesPerDay(stats) * BASE_CONVERSION_RATIO * USAGE_TAX, 2);
       }
@@ -116,7 +116,7 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
          }
 
          float metalsShouldUse = metalsPerDay * days;
-         cargo.removeCommodity(Commodities.METALS, metalsShouldUse);
+         cargo.removeCommodity(COMMODITY_USED, metalsShouldUse);
 
       }
    };
@@ -198,12 +198,12 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
       }
 
       if (isRepairInProgress(data.buffInstance, data.repairTarget)) {
-         tooltip.addPara("The ship is currently repairing %s. The cost is %s metals per day.", opad, h,
+         tooltip.addPara("The ship is currently repairing %s. The cost is %s " + COMMODITY_USED + " per day.", opad, h,
                "" + data.repairTarget.getShipName(),
                "" + (int) Math.round(RepairEquipmentBuff.getUsedMetalsPerDay(data.repairTarget.getStats())));
       } else if (ship.getFleetMember().getFleetData().getFleet().getCargo().getCommodityQuantity(
-            Commodities.METALS) < 1) {
-         tooltip.addPara("The ship is lacking metals for repair.", opad, h);
+            COMMODITY_USED) < 1) {
+         tooltip.addPara("The ship is lacking " + COMMODITY_USED + " for repair.", opad, h);
       } else if (ship.getFleetMember().getRepairTracker().getCR() < MIN_CR) {
          // impl/campaign/RepairGantry.java
          LabelAPI label = tooltip.addPara("This ship's combat readiness is below %s " +
@@ -224,14 +224,6 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
    @Override
    public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
-      FleetMemberAPI member = stats.getFleetMember();
-      State data = state.get(member);
-
-      if (data == null) {
-         State s = new State();
-         s.daysSinceLastTrigger = 0;
-         data = state.put(member, s);
-         data = s;
-      }
+      advanceInCampaign(stats.getFleetMember(), 0);
    }
 }

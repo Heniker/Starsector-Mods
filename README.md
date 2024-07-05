@@ -1,5 +1,5 @@
-# ImprovisedRefinery
-> Hullmod that converts Ore into Metals
+# Starsector Mods
+Source code - https://github.com/Heniker/Starsector-Mods
 
 ### Build
 Run `build/build.bash` file.

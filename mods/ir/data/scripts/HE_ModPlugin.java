@@ -14,6 +14,7 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
 import mods.common.MyHullmodSaver;
 import mods.ir.data.campaign.HE_AbilityToggle;
+import mods.ir.data.config.HE_Settings;
 import mods.ir.data.hullmods.HE_ImprovisedRefinery;
 
 public class HE_ModPlugin extends BaseModPlugin {
@@ -23,6 +24,10 @@ public class HE_ModPlugin extends BaseModPlugin {
 
     @Override
     public void afterGameSave() {
+        if (!HE_Settings.getSafeToDelete()) {
+            return;
+        }
+
         MemoryAPI persist = Global.getSector().getMemory();
 
         MyHullmodSaver.restoreModdedShips(HE_ImprovisedRefinery.ID);
@@ -46,6 +51,10 @@ public class HE_ModPlugin extends BaseModPlugin {
 
     @Override
     public void beforeGameSave() {
+        if (!HE_Settings.getSafeToDelete()) {
+            return;
+        }
+
         MemoryAPI persist = Global.getSector().getMemory();
 
         MyHullmodSaver.saveDeleteModdedShips(HE_ImprovisedRefinery.ID, HE_ImprovisedRefinery.state.keySet());

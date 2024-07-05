@@ -16,6 +16,9 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 
+/**
+ * Everything here should not throw NullPointer exception
+ */
 public class MyMisc {
   public static boolean isSMod(FleetMemberAPI member, HullModSpecAPI spec) {
     return member == null ? false : isSMod(member.getStats(), spec);
@@ -30,13 +33,20 @@ public class MyMisc {
     }
   }
 
+  /**
+   * THIS IS NOT SAFE TO CALL BEFORE GAME LOAD.
+   * For whatever reason Industrial Evolution makes the game crash if this
+   * is called during sector generation or fleet creation.
+   */
   public static float getCommodityConversionRatio(String from, String to) {
     return Global.getSettings().getCommoditySpec(from).getBasePrice()
         / Global.getSettings().getCommoditySpec(to).getBasePrice();
 
   }
 
-  // supplies needed per day to recover CR / repair ship
+  /**
+   * Supplies needed per day to recover CR / repair ship
+   */
   public static float getRecoverySuppliesPerDay(MutableShipStatsAPI stats) {
     return stats.getSuppliesToRecover().base
         / stats.getVariant().getHullSpec().getCRToDeploy()

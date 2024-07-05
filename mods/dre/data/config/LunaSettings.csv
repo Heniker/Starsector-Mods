@@ -1,0 +1,8 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+REPAIR_BONUS,Repair Rate bonus,Float,1.5,,Target Repair Rate increase while mod is active. Multiplicative.,,,
+SUPPLIES_RECOVERY_BONUS,Supplies Recovery bonus,Float,0.5,,Target Supplies to Recover reduce while mod is active. Multiplicative.,,,
+USAGE_TAX,Metals Usage tax,Float,1.2,,Modifier applied to metals usage (meaning Used Commodity). Multiplicative.,,,
+COMMODITY_USED,Used Commodity,Radio,metals,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships,crew,marines,food",Commodity used for repairs.,,,
+CONVERSION_RATIO,Conversion ratio,Float,,,Supplies base price divided by Used Commodity base price. Leave empty to calculate that for you.,,,
+DAYS_TO_TRIGGER,Days to Trigger update,Float,0.3,,"Campaign days to trigger hullmod update. Math is adjusted to work correctly with any value, so this is mostly a minor performance optimization.",,,
+SAFE_DELETE,Safe to remove,Boolean,true,,Is the mod safe to remove from the game. Unchecking this might improve game save times by a small margin.,,,

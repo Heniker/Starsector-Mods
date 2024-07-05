@@ -13,31 +13,34 @@ import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipAPI.HullSize;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.hullmods.BaseLogisticsHullMod;
 import com.fs.starfarer.api.loading.HullModSpecAPI;
 
 import mods.common.MyMisc;
+import mods.ir.data.config.HE_Settings;
 
+/**
+ * Hullmod that converts Ore into Metals
+ */
 public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
+   public static final Logger log = Global.getLogger(HE_ImprovisedRefinery.class);
+
    public static final String ID = "HE_ImprovisedRefinery";
    // space out updates to prevent lot's recalculations for in-game stuff & better
    // compitability w/ other mods. Set to 0 for insta updates
-   public static final float DAYS_TO_TRIGGER = 0.2F;
+   public static final float DAYS_TO_TRIGGER = HE_Settings.getDaysToTrigger();
 
-   public static final String COMMODITY_FROM = Commodities.ORE;
-   public static final String COMMODITY_TO = Commodities.METALS;
-   public static final float CONVERSION_TAX = 0.75F;
-   public static final float PRISTINE_N_TAX_BONUS_FLAT = 0.1F;
-   public static final float BASE_CONVERSION_SPEED = 72; // units per day
-   public static final float SMOD_BONUS_RATE = 1.4F;
-   public static final float NANOFORGE_BONUS_RATE = 1.5F;
+   public static final String COMMODITY_FROM = HE_Settings.getCommodityFrom();
+   public static final String COMMODITY_TO = HE_Settings.getCommodityTo();
+   public static final float CONVERSION_TAX = HE_Settings.getConversionTax();
+   public static final float PRISTINE_N_TAX_BONUS_FLAT = HE_Settings.getPristineNanoforgeTaxBonus();
+   public static final float BASE_CONVERSION_SPEED = HE_Settings.getBaseConversionSpeed(); // units per day
+   public static final float SMOD_BONUS_RATE = HE_Settings.getSmodBonusRate();
+   public static final float NANOFORGE_BONUS_RATE = HE_Settings.getNanoforgeBonusRate();
 
    // Industrial Evolution crashes if this is declared as static
-   public final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(COMMODITY_FROM,
-         COMMODITY_TO);
-         
+   public final float BASE_CONVERSION_RATIO = HE_Settings.getConversionRatio();
 
    public static boolean getEnabledForPlayerFleet() {
       return Global.getSector().getPlayerFleet() != null
@@ -47,11 +50,13 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
    public static float getConversionRatePerDay(FleetMemberAPI member, HullModSpecAPI spec) {
       float conversionRate = BASE_CONVERSION_SPEED;
-      CargoAPI cargo = member.getFleetData().getFleet().getCargo();
 
-      if (cargo == null) {
+      if (member == null || member.getFleetData() == null || member.getFleetData().getFleet() == null
+            || member.getFleetData().getFleet().getCargo() == null || spec == null) {
          return conversionRate;
       }
+
+      CargoAPI cargo = member.getFleetData().getFleet().getCargo();
 
       if (cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1) {
@@ -78,7 +83,7 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
       float tax = cargo != null ? cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1 ? CONVERSION_TAX + PRISTINE_N_TAX_BONUS_FLAT
                   : CONVERSION_TAX
-            : 0;
+            : 1;
 
       return MyMisc.round(usedOre * BASE_CONVERSION_RATIO * tax, 2);
    }
@@ -142,6 +147,11 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
             cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, hasOre));
          }
       } catch (NullPointerException err) {
+         // this actually never happened
+         log.error("Something unexpected happened. Probably the ship had no cargo storage. member, data:");
+         log.error(member);
+         log.error(data);
+         data.daysSinceLastTrigger -= 10000000;
       }
 
    }
@@ -153,15 +163,16 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
    @Override
    public void applyEffectsBeforeShipCreation(HullSize hullSize, MutableShipStatsAPI stats, String id) {
-      FleetMemberAPI member = stats.getFleetMember();
-      State data = state.get(member);
+      advanceInCampaign(stats.getFleetMember(), 0);
+      // FleetMemberAPI member = stats.getFleetMember();
+      // State data = state.get(member);
 
-      if (data == null) {
-         State s = new State();
-         s.isInPlayerFleet = isInPlayerFleet(stats);
-         s.daysSinceLastTrigger = 0;
-         data = state.put(member, s);
-         data = s;
-      }
+      // if (data == null) {
+      // State s = new State();
+      // s.isInPlayerFleet = isInPlayerFleet(stats);
+      // s.daysSinceLastTrigger = 0;
+      // data = state.put(member, s);
+      // data = s;
+      // }
    }
 }

@@ -8,6 +8,7 @@
     "..\\..\\starsector-core\\lwjgl_util.jar",
     "..\\..\\starsector-core\\xstream-1.4.10.jar",
     "..\\..\\starsector-core\\log4j-1.2.9.jar",
+    "..\\..\\mods\\LunaLib\\jars\\LunaLib.jar",
     "..\\..\\mods\\LazyLib\\jars\\LazyLib.jar",
     "..\\..\\mods\\MagicLib\\jars\\MagicLib.jar",
     "..\\..\\mods\\zz GraphicsLib\\jars\\Graphics.jar"

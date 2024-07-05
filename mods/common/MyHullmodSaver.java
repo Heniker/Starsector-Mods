@@ -13,7 +13,7 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 @SuppressWarnings("unchecked")
 public class MyHullmodSaver {
 
-  public static enum StoreKeys {
+  private static enum StoreKeys {
     fleet,
     smod,
     mod,
@@ -21,7 +21,7 @@ public class MyHullmodSaver {
     builtin,
   }
 
-  public static String getStoreKey(StoreKeys id, String modId) {
+  private static String getStoreKey(StoreKeys id, String modId) {
     switch (id) {
       case fleet: {
         return "$" + modId + ".moddedFleet";
@@ -76,7 +76,7 @@ public class MyHullmodSaver {
           that.getVariant().addPermaMod(modId, true);
         } else if (builtinMods.contains(id)) {
           that.getHullSpec().addBuiltInMod(modId);
-          that.getHullSpec().getBuiltInMods().add(modId); //idk why
+          that.getHullSpec().getBuiltInMods().add(modId); // idk why
           that.getVariant().addPermaMod(modId);
         } else if (supprsessedShips.contains(id)) {
           that.getVariant().addSuppressedMod(modId);
@@ -103,17 +103,16 @@ public class MyHullmodSaver {
     HashSet<String> builtinMods = new HashSet<String>();
 
     for (FleetMemberAPI it : members) {
-      // ffs
-      if (it == null || it.getVariant() == null || it.getFleetData() == null || it.getFleetData().getFleet() == null
-          || it.getHullSpec() == null) {
+      if (it == null || it.getVariant() == null || it.getHullSpec() == null) {
         continue;
       }
 
-      if (it.getVariant().getHullMods().contains(modId)) {
+      if (it.getVariant().getHullMods().contains(modId) && it.getFleetData() != null
+          && it.getFleetData().getFleet() != null) {
         moddedFleets.add(it.getFleetData().getFleet().getId());
       }
 
-      if (it.getHullSpec().isBuiltInMod(modId)) {
+      if (it.getHullSpec().getBuiltInMods().contains(modId)) {
         builtinMods.add(it.getId());
       }
 
@@ -125,10 +124,11 @@ public class MyHullmodSaver {
         moddedShips.add(it.getId());
       }
 
-      it.getVariant().getHullSpec().getBuiltInMods().remove(modId);
+      it.getHullSpec().getBuiltInMods().remove(modId);
       it.getVariant().getHullMods().remove(modId);
       it.getVariant().removeMod(modId);
       it.getVariant().removePermaMod(modId);
+
     }
 
     persist.unset(getStoreKey(StoreKeys.fleet, modId));

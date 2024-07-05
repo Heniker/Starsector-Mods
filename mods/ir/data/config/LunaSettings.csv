@@ -1,0 +1,11 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+CONVERSION_TAX,Conversion tax,Float,0.75,,Conversion process tax. Basically a penalty modifier applied to recieved resources. Multiplicative.,,,
+PRISTINE_N_TAX_BONUS_FLAT,Pristine Nanoforge flat tax bonus,Float,0.1,,"Having Pristine Nanoforge in inventory applies flat bonus to Conversion tax. Additive, non stacking.",,,
+BASE_CONVERSION_SPEED,Conversion rate,Float,72,,"Base conversion rate per day. It is then futher modifier by SMod Bonus Rate, ship CR and other factors.",,,
+SMOD_BONUS_RATE,SMod bonus rate,Float,1.4,,SMod Conversion rate bonus. Multiplicative.,,,
+NANOFORGE_BONUS_RATE,Nanoforge bonus rate,Float,1.5,,"Having any Nanoforge in inventory applies this bonus to Conversion rate. Multiplicative, non stacking.",,,
+COMMODITY_FROM,Used Commodity,Radio,ore,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships,crew,marines,food",Commodity taken from cargo.,,,
+COMMODITY_TO,Gained Commodity,Radio,metals,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships,crew,marines,food",Commodity placed in cargo.,,,
+CONVERSION_RATIO,Conversion ratio,Float,,,Used Commodity base price divided by Gained Commodity base price. Leave empty to calculate that for you.,,,
+DAYS_TO_TRIGGER,Days to Trigger update,Float,0.3,,"Campaign days to trigger hullmod update. Math is adjusted to work correctly with any value, so this is mostly a minor performance optimization.",,,
+SAFE_DELETE,Safe to remove,Boolean,true,,Is the mod safe to remove from the game. Unchecking this might improve game save times by a small margin.,,,

@@ -4,9 +4,9 @@ import org.apache.log4j.Logger;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.fleet.FleetMemberAPI;
 
 import mods.common.MyHullmodSaver;
+import mods.dre.data.config.HE_Settings;
 import mods.dre.data.hullmods.HE_DedicatedRepairEquipment;
 import mods.dre.data.hullmods.HE_DedicatedRepairEquipment.State;
 
@@ -15,23 +15,30 @@ public class HE_ModPlugin extends BaseModPlugin {
 
     @Override
     public void afterGameSave() {
+        if (!HE_Settings.getSafeToDelete()) {
+            return;
+        }
+
         MyHullmodSaver.restoreModdedShips(HE_DedicatedRepairEquipment.ID);
     }
 
     @Override
     public void beforeGameSave() {
+        if (!HE_Settings.getSafeToDelete()) {
+            return;
+        }
+
         MyHullmodSaver.saveDeleteModdedShips(HE_DedicatedRepairEquipment.ID,
                 HE_DedicatedRepairEquipment.state.keySet());
 
         for (State it : HE_DedicatedRepairEquipment.state.values()) {
             if (it == null || it.repairTarget == null || it.repairTarget.getBuffManager() == null) {
-                return;
+                continue;
             }
 
             it.repairTarget.getBuffManager()
-                    .removeBuff(HE_DedicatedRepairEquipment.RepairEquipmentBuff.BUFF_ID);
+                    .removeBuff(HE_DedicatedRepairEquipment.BUFF_ID);
         }
-
     }
 
     @Override
