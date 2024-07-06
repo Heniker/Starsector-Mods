@@ -28,6 +28,30 @@ Then launch VSCode "attach" debug configuration.
 
 Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.zip`
 
+### Mods
+
+#### Improvised Refinery
+- Improvised Refinery hullmod:<br/>
+  Install an Improvised Refinery onto the ship that can inefficently convert Ore into Metals.<br/>
+  The conversion speed is based on CR and number of ships with hullmod in fleet.<br/>
+  A logistics hullmod. Can only be installed on Capital class ships. Unlocks when player gets Improvised Equipment skill. Can be randomly found in derelict structures.<br/>
+
+- Toggle Refinery ability:<br/>
+  Toggles Improvised Refinery hullmod for all ships within player fleet.<br/>
+
+Safe to add/remove mid-game.
+
+#### Dedicated Repair Equipment
+- Dedicated Repair Equipment hullmod:<br/>
+  Ship with this hullmod can aid in repairs of a single other ship within fleet.<br/>
+  Increases repair speed, but not CR recovery speed.<br/>
+  While target is repairing/recovering CR - the recovery supplies cost will be reduced.<br/>
+  Drains metals while active propotinal to target recovery cost.<br/>
+  Can not be installed. Built-in on Salvage Rig.<br/>
+  To prevent hullmod from activating - disable repairs on Salvage Rig or mothball it.
+
+Safe to add/remove mid-game.
+
 <!--
 Mod is 80% done;
 
@@ -38,6 +62,7 @@ Test if mod can actually be removed mid-game
 See if icon from ability can be deleted
 Add version checker integration
 Try to add conversionRate to Luna
+add indicator for IR ability describing contributing factors (Nanoforge, participating ships)
 
 Test nanoforge
 
