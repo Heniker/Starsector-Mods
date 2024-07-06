@@ -5,7 +5,10 @@ import org.apache.log4j.Logger;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 
+import lunalib.lunaSettings.LunaSettings;
+import lunalib.lunaSettings.LunaSettingsListener;
 import mods.common.MyHullmodSaver;
+import mods.dre.Constants;
 import mods.dre.data.config.HE_Settings;
 import mods.dre.data.hullmods.HE_DedicatedRepairEquipment;
 import mods.dre.data.hullmods.HE_DedicatedRepairEquipment.State;
@@ -43,6 +46,23 @@ public class HE_ModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
+        HE_Settings.updateSettings();
         this.afterGameSave();
+    }
+
+    public class SettingsListener implements LunaSettingsListener {
+        @Override
+        public void settingsChanged(String modId) {
+            if (modId != Constants.MOD_ID) {
+                return;
+            }
+
+            HE_Settings.updateSettings();
+        }
+    }
+
+    @Override
+    public void onApplicationLoad() throws Exception {
+        LunaSettings.addSettingsListener(new SettingsListener());
     }
 }

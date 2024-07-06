@@ -30,15 +30,15 @@ import mods.dre.data.config.HE_Settings;
 public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    public static Logger log = Global.getLogger(HE_DedicatedRepairEquipment.class);
    public static final String ID = "HE_DedicatedRepairEquipment";
-   public static final String BUFF_ID = "repair_equipment_bonus";
+   public static final String BUFF_ID = "RepairEquipmentBuff";
 
-   public static final float DAYS_TO_TRIGGER = HE_Settings.getDaysToTrigger();
+   public static float DAYS_TO_TRIGGER = HE_Settings.getDaysToTrigger();
 
-   public static final float REPAIR_BONUS = HE_Settings.getRepairBonus();
-   public static final float SUPPLIES_RECOVERY_BONUS = HE_Settings.getSuppliesRecoveryBonus();
-   public static final float MIN_CR = 0.1F;
-   public static final String COMMODITY_USED = HE_Settings.getCommodityUsed();
-   private static final float USAGE_TAX = HE_Settings.getUsageTax();
+   public static float REPAIR_BONUS = HE_Settings.getRepairBonus();
+   public static float SUPPLIES_RECOVERY_BONUS = HE_Settings.getSuppliesRecoveryBonus();
+   public static String COMMODITY_USED = HE_Settings.getCommodityUsed();
+   public static float USAGE_TAX = HE_Settings.getUsageTax();
+   private static float MIN_CR = 0.1F;
 
    private final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES, HE_Settings.getCommodityUsed());
 

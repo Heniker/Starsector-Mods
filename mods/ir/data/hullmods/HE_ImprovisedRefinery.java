@@ -29,18 +29,19 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
    public static final String ID = "HE_ImprovisedRefinery";
    // space out updates to prevent lot's recalculations for in-game stuff & better
    // compitability w/ other mods. Set to 0 for insta updates
-   public static final float DAYS_TO_TRIGGER = HE_Settings.getDaysToTrigger();
+   public static float DAYS_TO_TRIGGER = HE_Settings.getDaysToTrigger();
 
-   public static final String COMMODITY_FROM = HE_Settings.getCommodityFrom();
-   public static final String COMMODITY_TO = HE_Settings.getCommodityTo();
-   public static final float CONVERSION_TAX = HE_Settings.getConversionTax();
-   public static final float PRISTINE_N_TAX_BONUS_FLAT = HE_Settings.getPristineNanoforgeTaxBonus();
-   public static final float BASE_CONVERSION_SPEED = HE_Settings.getBaseConversionSpeed(); // units per day
-   public static final float SMOD_BONUS_RATE = HE_Settings.getSmodBonusRate();
-   public static final float NANOFORGE_BONUS_RATE = HE_Settings.getNanoforgeBonusRate();
+   public static String COMMODITY_FROM = HE_Settings.getCommodityFrom();
+   public static String COMMODITY_TO = HE_Settings.getCommodityTo();
+   public static float CONVERSION_TAX = HE_Settings.getConversionTax();
+   public static float PRISTINE_N_TAX_BONUS_FLAT = HE_Settings.getPristineNanoforgeTaxBonus();
+   public static float BASE_CONVERSION_SPEED = HE_Settings.getBaseConversionSpeed(); // units per day
+   public static float SMOD_BONUS_RATE = HE_Settings.getSmodBonusRate();
+   public static float NANOFORGE_BONUS_RATE = HE_Settings.getNanoforgeBonusRate();
 
    // Industrial Evolution crashes if this is declared as static
-   public final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(HE_Settings.getCommodityFrom(), HE_Settings.getCommodityTo());
+   public final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(HE_Settings.getCommodityFrom(),
+         HE_Settings.getCommodityTo());
 
    public static boolean getEnabledForPlayerFleet() {
       return Global.getSector().getPlayerFleet() != null

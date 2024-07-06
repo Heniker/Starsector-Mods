@@ -4,7 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
 import lunalib.lunaSettings.LunaSettings;
-import mods.common.MyMisc;
+import mods.ir.data.hullmods.HE_ImprovisedRefinery;
 
 public class HE_Settings {
   static String modId = "HE_ImprovisedRefinery";
@@ -70,5 +70,16 @@ public class HE_Settings {
       return LunaSettings.getFloat(modId, "CONVERSION_TAX");
     }
     return 0.75f;
+  }
+
+  public static void updateSettings() {
+    HE_ImprovisedRefinery.DAYS_TO_TRIGGER = getDaysToTrigger();
+    HE_ImprovisedRefinery.COMMODITY_FROM = getCommodityFrom();
+    HE_ImprovisedRefinery.COMMODITY_TO = getCommodityTo();
+    HE_ImprovisedRefinery.CONVERSION_TAX = getConversionTax();
+    HE_ImprovisedRefinery.PRISTINE_N_TAX_BONUS_FLAT = getPristineNanoforgeTaxBonus();
+    HE_ImprovisedRefinery.BASE_CONVERSION_SPEED = getBaseConversionSpeed();
+    HE_ImprovisedRefinery.SMOD_BONUS_RATE = getSmodBonusRate();
+    HE_ImprovisedRefinery.NANOFORGE_BONUS_RATE = getNanoforgeBonusRate();
   }
 }

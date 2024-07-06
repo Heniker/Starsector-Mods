@@ -2,9 +2,14 @@
 
 FILE_NAME="${1}"
 
-if [ -z "${1}" ]; then
+if [[ -z "${1}" ]]; then
   ./build.bash dre
   ./build.bash ir
+  exit
+fi
+
+if [[ "${FILE_NAME}" != "dre" ]] && [[ "${FILE_NAME}" != "ir" ]]; then
+  echo "Unknown argument"
   exit
 fi
 
@@ -18,6 +23,13 @@ readonly STARSECTOR_MOD_DIR=$(realpath "${STARSECTOR_CORE_DIR}/../mods/${FILE_NA
 
 readonly LUNALIB=$(realpath "${STARSECTOR_CORE_DIR}/../mods/LunaLib/jars/LunaLib.jar")
 
+BUNDLE_NAME="unnamed_bundle.zip"
+if [[ "${FILE_NAME}" == "dre" ]]; then
+  readonly BUNDLE_NAME="Dedicated Repair Equipment.zip"
+elif [[ "${FILE_NAME}" == "ir" ]]; then
+  readonly BUNDLE_NAME="Improvised Refinery.zip"
+fi
+
 # ---
 
 rm -rf "${OUT_DIR}"
@@ -30,14 +42,14 @@ readonly SOURCE_FILES="$(find ${W_DIR} -type f -name "*.java") $(find ${COMMON_D
 
 javac -source 1.7 -target 1.7 -cp "${LUNALIB}":"${STARSECTOR_CORE_DIR}/starfarer.api.jar":"${STARSECTOR_CORE_DIR}/lwjgl.jar":"${STARSECTOR_CORE_DIR}/lwjgl_util.jar":"${STARSECTOR_CORE_DIR}/xstream-1.4.10.jar":"${STARSECTOR_CORE_DIR}/log4j-1.2.9.jar" ${SOURCE_FILES} -d tmp
 
-if [ ! $? -eq 0 ]; then
+if [[ ! $? -eq 0 ]]; then
   echo Error happened. Exiting...
   exit
 fi
 
 jar cf "${FILE_NAME}.jar" -C tmp .
 
-if [ ! $? -eq 0 ]; then
+if [[ ! $? -eq 0 ]]; then
   echo Error happened. Exiting...
   exit
 fi
@@ -58,6 +70,16 @@ cp "${ROOT_DIR}/README.md" "${OUT_DIR}/README.md"
 rm -rf "${STARSECTOR_MOD_DIR}"
 mkdir "${STARSECTOR_MOD_DIR}"
 cp -r "${BUILD_DIR}/${FILE_NAME}"/* "${STARSECTOR_MOD_DIR}"
+
+# create release archive
+7z > /dev/null
+
+if [[ ! $? -eq 0 ]]; then
+  echo 7z is not avaliable
+else
+  rm -f "${BUILD_DIR}/${BUNDLE_NAME}"
+  7z a "${BUILD_DIR}/${BUNDLE_NAME}" "${OUT_DIR}"/* > /dev/null
+fi
 
 echo
 echo Fin

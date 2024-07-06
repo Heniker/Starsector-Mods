@@ -28,20 +28,28 @@ Then launch VSCode "attach" debug configuration.
 
 Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.zip`
 
-### Mods
+# Mods
 
-#### Improvised Refinery
+### Improvised Refinery
 - Improvised Refinery hullmod:<br/>
-  Install an Improvised Refinery onto the ship that can inefficently convert Ore into Metals.<br/>
-  The conversion speed is based on CR and number of ships with hullmod in fleet.<br/>
+  Install an Improvised Refinery onto the ship. The Refinery can inefficently convert Ore into Metals.<br/>
+  The conversion speed is based on CR and number of ships with hullmod in fleet. Having nanoforge in cargo also influences conversion speed and efficiency.<br/>
   A logistics hullmod. Can only be installed on Capital class ships. Unlocks when player gets Improvised Equipment skill. Can be randomly found in derelict structures.<br/>
+  Updates (effectively) in real-time<br/>
 
 - Toggle Refinery ability:<br/>
   Toggles Improvised Refinery hullmod for all ships within player fleet.<br/>
 
 Safe to add/remove mid-game.
 
-#### Dedicated Repair Equipment
+Similar'ish mods: 
+- Aptly Simple Hullmods (Audax) - https://fractalsoftworks.com/forum/index.php?topic=24550.0
+- Ore Refinery (Dazs) - https://fractalsoftworks.com/forum/index.php?topic=22882.0
+- Supply Forging (Timid) - https://fractalsoftworks.com/forum/index.php?topic=17503.0
+
+This mod is inspired by Supply Forging, but uses no code from Supply Forging and has a completely different implementation.
+
+### Dedicated Repair Equipment
 - Dedicated Repair Equipment hullmod:<br/>
   Ship with this hullmod can aid in repairs of a single other ship within fleet.<br/>
   Increases repair speed, but not CR recovery speed.<br/>
@@ -51,6 +59,12 @@ Safe to add/remove mid-game.
   To prevent hullmod from activating - disable repairs on Salvage Rig or mothball it.
 
 Safe to add/remove mid-game.
+
+This idea came from old forum post mentioning how Salvage Rig used to work in the game. Also from the fact that Salvage Rig is called "Construction Rig" in the game files.
+
+To modders:<br/>
+If you feel like Dedicated Repair Equipment might fit in your ship design - adding it should be as simple as checking if mod is installed in ModPlugin and calling `ShipHullSpecAPI.addBuiltInMod`.
+Everything else (like safe mid-game removal) should be handled by the mod itself.  Reach me out if it does not work that well.
 
 <!--
 Mod is 80% done;

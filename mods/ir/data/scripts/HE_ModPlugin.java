@@ -1,18 +1,14 @@
 package mods.ir.data.scripts;
 
-import java.util.HashSet;
 import org.apache.log4j.Logger;
-
-import java.util.Set;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.fleet.FleetMemberAPI;
-
+import lunalib.lunaSettings.LunaSettings;
+import lunalib.lunaSettings.LunaSettingsListener;
 import mods.common.MyHullmodSaver;
+import mods.ir.Constants;
 import mods.ir.data.campaign.HE_AbilityToggle;
 import mods.ir.data.config.HE_Settings;
 import mods.ir.data.hullmods.HE_ImprovisedRefinery;
@@ -52,6 +48,7 @@ public class HE_ModPlugin extends BaseModPlugin {
     @Override
     public void beforeGameSave() {
         if (!HE_Settings.getSafeToDelete()) {
+            HE_Settings.updateSettings();
             return;
         }
 
@@ -74,5 +71,21 @@ public class HE_ModPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
         this.afterGameSave();
+    }
+
+    public class SettingsListener implements LunaSettingsListener {
+        @Override
+        public void settingsChanged(String modId) {
+            if (modId != Constants.MOD_ID) {
+                return;
+            }
+
+            HE_Settings.updateSettings();
+        }
+    }
+
+    @Override
+    public void onApplicationLoad() throws Exception {
+        LunaSettings.addSettingsListener(new SettingsListener());
     }
 }
