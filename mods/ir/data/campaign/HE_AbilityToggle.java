@@ -101,11 +101,13 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 				pad);
 
 		tooltip.addPara(
-				"Your refineries are capable of converting %s Ore into %s Metals per day.",
+				"Your refineries are capable of converting %s "
+						+ MyMisc.prettifyCommodityKey(HE_ImprovisedRefinery.COMMODITY_FROM) + " into %s "
+						+ MyMisc.prettifyCommodityKey(HE_ImprovisedRefinery.COMMODITY_TO) + " per day.",
 				pad, highlight,
-				"" + (int) oreProcessedPerDay,
+				"" + oreProcessedPerDay,
 				"" + ((HE_ImprovisedRefinery) MyMisc.getHullMod(HE_ImprovisedRefinery.ID)).getRecievedMetals(
-						fleet.getFleetData().getFleet().getFlagship(),
+						fleet.getFleetData().getFleet().getCargo(),
 						oreProcessedPerDay));
 
 		// tooltip.addPara("Increases the range at which the fleet can be detected by
@@ -127,10 +129,10 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 		return true;
 	}
 
-	@Override
-	public EnumSet<CampaignEngineLayers> getActiveLayers() {
-		return EnumSet.of(CampaignEngineLayers.ABOVE);
-	}
+	// @Override
+	// public EnumSet<CampaignEngineLayers> getActiveLayers() {
+	// return EnumSet.of(CampaignEngineLayers.ABOVE);
+	// }
 
 	// @Override
 	// public void advance(float amount) {
@@ -143,11 +145,12 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 
 	@Override
 	public boolean isUsable() {
-		CampaignFleetAPI fleet = getFleet();
-		if (fleet == null)
-			return false;
+		return true;
+		// CampaignFleetAPI fleet = getFleet();
+		// if (fleet == null)
+		// return false;
 
-		return !Misc.isInsideSlipstream(fleet);
+		// return !Misc.isInsideSlipstream(fleet);
 		// return isActive() || !fleet.isInHyperspace();
 	}
 

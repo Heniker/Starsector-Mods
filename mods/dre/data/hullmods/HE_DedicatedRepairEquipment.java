@@ -40,7 +40,8 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    public static float USAGE_TAX = HE_Settings.getUsageTax();
    private static float MIN_CR = 0.1F;
 
-   private final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES, HE_Settings.getCommodityUsed());
+   private final float BASE_CONVERSION_RATIO = MyMisc.getCommodityConversionRatio(Commodities.SUPPLIES,
+         HE_Settings.getCommodityUsed());
 
    public static boolean isValidForRepair(FleetMemberAPI repairShip, FleetMemberAPI repairTarget) {
       return repairShip != null && repairTarget != null && repairTarget != repairShip
@@ -200,12 +201,16 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
       }
 
       if (isRepairInProgress(data.buffInstance, data.repairTarget)) {
-         tooltip.addPara("The ship is currently repairing %s. The cost is %s " + COMMODITY_USED + " per day.", opad, h,
+         tooltip.addPara(
+               "The ship is currently repairing %s. The cost is %s " + MyMisc.prettifyCommodityKey(COMMODITY_USED)
+                     + " per day.",
+               opad, h,
                "" + data.repairTarget.getShipName(),
                "" + (int) Math.round(getUsedMetalsPerDay(data.repairTarget.getStats())));
       } else if (ship.getFleetMember().getFleetData().getFleet().getCargo().getCommodityQuantity(
             COMMODITY_USED) < 1) {
-         tooltip.addPara("The ship is lacking " + COMMODITY_USED + " for repair.", opad, h);
+         tooltip.addPara("The ship is lacking " + MyMisc.prettifyCommodityKey(COMMODITY_USED) + " for repair.", opad,
+               h);
       } else if (ship.getFleetMember().getRepairTracker().getCR() < MIN_CR) {
          // impl/campaign/RepairGantry.java
          LabelAPI label = tooltip.addPara("This ship's combat readiness is below %s " +

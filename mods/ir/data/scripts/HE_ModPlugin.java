@@ -5,10 +5,7 @@ import org.apache.log4j.Logger;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import lunalib.lunaSettings.LunaSettings;
-import lunalib.lunaSettings.LunaSettingsListener;
 import mods.common.MyHullmodSaver;
-import mods.ir.Constants;
 import mods.ir.data.campaign.HE_AbilityToggle;
 import mods.ir.data.config.HE_Settings;
 import mods.ir.data.hullmods.HE_ImprovisedRefinery;
@@ -73,19 +70,10 @@ public class HE_ModPlugin extends BaseModPlugin {
         this.afterGameSave();
     }
 
-    public class SettingsListener implements LunaSettingsListener {
-        @Override
-        public void settingsChanged(String modId) {
-            if (modId != Constants.MOD_ID) {
-                return;
-            }
-
-            HE_Settings.updateSettings();
-        }
-    }
-
     @Override
     public void onApplicationLoad() throws Exception {
-        LunaSettings.addSettingsListener(new SettingsListener());
+        if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
+            new HE_InitLunaListener().init();
+        }
     }
 }

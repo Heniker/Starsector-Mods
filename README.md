@@ -62,30 +62,24 @@ Safe to add/remove mid-game.
 
 This idea came from old forum post mentioning how Salvage Rig used to work in the game. Also from the fact that Salvage Rig is called "Construction Rig" in the game files.
 
-To modders:<br/>
-If you feel like Dedicated Repair Equipment might fit in your ship design - adding it should be as simple as checking if mod is installed in ModPlugin and calling `ShipHullSpecAPI.addBuiltInMod`.
-Everything else (like safe mid-game removal) should be handled by the mod itself.  Reach me out if it does not work that well.
-
 <!--
-Mod is 80% done;
+Mod is 96% done;
 
 TODO:
-Test Luna integraion
-See if mod can work without Luna
-Test if mod can actually be removed mid-game
-See if icon from ability can be deleted
 Add version checker integration
 Try to add conversionRate to Luna
 add indicator for IR ability describing contributing factors (Nanoforge, participating ships)
 
-Test nanoforge
-
 Add icons for hullmods and ability
-?Add post description for ImprovisedRefinery
-?Add mod settings
-Add detection range increase while refinery is active
+? Add post description for ImprovisedRefinery
+? Add detection range increase while refinery is active
 
 TODONE:
++- Test Luna integraion
+Test nanoforge
+Add mod settings
+See if mod can work without Luna
+Test if mod can actually be removed mid-game
 Test SMod ratios.
 check smod save on Ir 
 Test Ore Conversion

@@ -20,6 +20,11 @@ import com.fs.starfarer.api.loading.HullModSpecAPI;
  * Everything here should not throw NullPointer exception
  */
 public class MyMisc {
+  // I have no idea where commodity names are and I don't care
+  public static String prettifyCommodityKey(String commodity) {
+    return commodity.substring(0, 1).toUpperCase() + commodity.substring(1).replace("_", " ");
+  }
+
   public static boolean isSMod(FleetMemberAPI member, HullModSpecAPI spec) {
     return member == null ? false : isSMod(member.getStats(), spec);
   }

@@ -4,7 +4,6 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
 import lunalib.lunaSettings.LunaSettings;
-import mods.common.MyMisc;
 import mods.dre.Constants;
 import mods.dre.data.hullmods.HE_DedicatedRepairEquipment;
 

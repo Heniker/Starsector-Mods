@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
@@ -16,8 +17,9 @@ public class MyHullmodSaver {
 
   private static enum StoreKeys {
     fleet,
-    smod,
-    mod,
+    faction,
+    supermod,
+    standardmod,
     suppressedmod,
     builtin,
   }
@@ -27,17 +29,20 @@ public class MyHullmodSaver {
       case fleet: {
         return "$" + modId + ".moddedFleet";
       }
-      case smod: {
+      case faction: {
+        return "$" + modId + ".faction";
+      }
+      case supermod: {
         return "$" + modId + ".sModMember";
       }
-      case mod: {
+      case standardmod: {
         return "$" + modId + ".standardModMember";
       }
       case suppressedmod: {
-        return "$" + modId + ".suppressedModModMember";
+        return "$" + modId + ".suppressedModMember";
       }
       case builtin: {
-        return "$" + modId + ".suppressedModModMember";
+        return "$" + modId + ".builtinMod";
       }
       default: {
         throw new Error();
@@ -49,13 +54,25 @@ public class MyHullmodSaver {
     MemoryAPI persist = Global.getSector().getMemory();
 
     HashSet<String> moddedFleets = (HashSet<String>) persist.get(getStoreKey(StoreKeys.fleet, modId));
+    HashSet<String> moddedFactions = (HashSet<String>) persist.get(getStoreKey(StoreKeys.faction, modId));
     HashSet<String> supprsessedShips = (HashSet<String>) persist.get(getStoreKey(StoreKeys.suppressedmod, modId));
-    HashSet<String> moddedShips = (HashSet<String>) persist.get(getStoreKey(StoreKeys.mod, modId));
-    HashSet<String> sModdedShips = (HashSet<String>) persist.get(getStoreKey(StoreKeys.smod, modId));
+    HashSet<String> moddedShips = (HashSet<String>) persist.get(getStoreKey(StoreKeys.standardmod, modId));
+    HashSet<String> sModdedShips = (HashSet<String>) persist.get(getStoreKey(StoreKeys.supermod, modId));
     HashSet<String> builtinMods = (HashSet<String>) persist.get(getStoreKey(StoreKeys.builtin, modId));
 
-    if (moddedFleets == null || moddedShips == null || sModdedShips == null || supprsessedShips == null) {
+    if (moddedFleets == null || moddedShips == null || sModdedShips == null || supprsessedShips == null
+        || moddedFactions == null) {
       return;
+    }
+
+    for (String it : moddedFactions) {
+      for (FactionAPI that : Global.getSector().getAllFactions()) {
+        if (that == null || that.getId() != it) {
+          continue;
+        }
+
+        that.addKnownHullMod(modId);
+      }
     }
 
     for (String it : moddedFleets) {
@@ -98,10 +115,20 @@ public class MyHullmodSaver {
     MemoryAPI persist = Global.getSector().getMemory();
 
     HashSet<String> moddedFleets = new HashSet<String>();
+    HashSet<String> moddedFactions = new HashSet<String>();
     HashSet<String> suppressed = new HashSet<String>();
     HashSet<String> moddedShips = new HashSet<String>();
     HashSet<String> sModdedShips = new HashSet<String>();
     HashSet<String> builtinMods = new HashSet<String>();
+
+    for (FactionAPI it : Global.getSector().getAllFactions()) {
+      if (it == null || !it.knowsHullMod(modId)) {
+        continue;
+      }
+
+      moddedFactions.add(modId);
+      it.removeKnownHullMod(modId);
+    }
 
     HashSet<ShipHullSpecAPI> cleanupHullSpecs = new HashSet<ShipHullSpecAPI>();
 
@@ -138,15 +165,17 @@ public class MyHullmodSaver {
     }
 
     persist.unset(getStoreKey(StoreKeys.fleet, modId));
+    persist.unset(getStoreKey(StoreKeys.faction, modId));
     persist.unset(getStoreKey(StoreKeys.suppressedmod, modId));
-    persist.unset(getStoreKey(StoreKeys.mod, modId));
-    persist.unset(getStoreKey(StoreKeys.smod, modId));
+    persist.unset(getStoreKey(StoreKeys.standardmod, modId));
+    persist.unset(getStoreKey(StoreKeys.supermod, modId));
     persist.unset(getStoreKey(StoreKeys.builtin, modId));
 
     persist.set(getStoreKey(StoreKeys.fleet, modId), moddedFleets);
+    persist.set(getStoreKey(StoreKeys.faction, modId), moddedFactions);
     persist.set(getStoreKey(StoreKeys.suppressedmod, modId), suppressed);
-    persist.set(getStoreKey(StoreKeys.mod, modId), moddedShips);
-    persist.set(getStoreKey(StoreKeys.smod, modId), sModdedShips);
+    persist.set(getStoreKey(StoreKeys.standardmod, modId), moddedShips);
+    persist.set(getStoreKey(StoreKeys.supermod, modId), sModdedShips);
     persist.set(getStoreKey(StoreKeys.builtin, modId), builtinMods);
   }
 }

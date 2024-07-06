@@ -78,9 +78,7 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
       return conversionRate;
    }
 
-   public float getRecievedMetals(FleetMemberAPI member, float usedOre) {
-      CargoAPI cargo = member.getFleetData().getFleet().getCargo();
-
+   public float getRecievedMetals(CargoAPI cargo, float usedOre) {
       float tax = cargo != null ? cargo.getQuantity(CargoItemType.SPECIAL,
             new SpecialItemData(Items.PRISTINE_NANOFORGE, null)) >= 1 ? CONVERSION_TAX + PRISTINE_N_TAX_BONUS_FLAT
                   : CONVERSION_TAX
@@ -142,10 +140,10 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
          CargoAPI cargo = member.getFleetData().getFleet().getCargo();
          if (hasOre > usedOre) {
             cargo.removeCommodity(COMMODITY_FROM, usedOre);
-            cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, usedOre));
+            cargo.addCommodity(COMMODITY_TO, getRecievedMetals(cargo, usedOre));
          } else {
             cargo.removeCommodity(COMMODITY_FROM, hasOre);
-            cargo.addCommodity(COMMODITY_TO, getRecievedMetals(member, hasOre));
+            cargo.addCommodity(COMMODITY_TO, getRecievedMetals(cargo, hasOre));
          }
       } catch (NullPointerException err) {
          // this actually never happened
