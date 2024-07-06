@@ -32,6 +32,13 @@ Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.z
 Mod is 80% done;
 
 TODO:
+Test Luna integraion
+See if mod can work without Luna
+Test if mod can actually be removed mid-game
+See if icon from ability can be deleted
+Add version checker integration
+Try to add conversionRate to Luna
+
 Test nanoforge
 
 Add icons for hullmods and ability
