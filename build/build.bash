@@ -23,11 +23,11 @@ readonly STARSECTOR_MOD_DIR=$(realpath "${STARSECTOR_CORE_DIR}/../mods/${FILE_NA
 
 readonly LUNALIB=$(realpath "${STARSECTOR_CORE_DIR}/../mods/LunaLib/jars/LunaLib.jar")
 
-BUNDLE_NAME="unnamed_bundle.zip"
+BUNDLE_NAME="unnamed_bundle"
 if [[ "${FILE_NAME}" == "dre" ]]; then
-  readonly BUNDLE_NAME="Dedicated Repair Equipment.zip"
+  readonly BUNDLE_NAME="Dedicated Repair Equipment"
 elif [[ "${FILE_NAME}" == "ir" ]]; then
-  readonly BUNDLE_NAME="Improvised Refinery.zip"
+  readonly BUNDLE_NAME="Improvised Refinery"
 fi
 
 # ---
@@ -77,8 +77,9 @@ cp -r "${BUILD_DIR}/${FILE_NAME}"/* "${STARSECTOR_MOD_DIR}"
 if [[ ! $? -eq 0 ]]; then
   echo 7z is not avaliable
 else
-  rm -f "${BUILD_DIR}/${BUNDLE_NAME}"
-  7z a "${BUILD_DIR}/${BUNDLE_NAME}" "${OUT_DIR}"/* > /dev/null
+  rm -f "${BUILD_DIR}/${BUNDLE_NAME}.zip"
+  7z a "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${OUT_DIR}" > /dev/null
+  7z rn "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${FILE_NAME}" "${BUNDLE_NAME}" > /dev/null
 fi
 
 echo

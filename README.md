@@ -4,8 +4,9 @@ Source code - https://github.com/Heniker/Starsector-Mods
 ### Build
 Run `build/build.bash` file.
 
-Javac and Jar installed by scoop:
+Requirements installed by scoop:
 ```
+scoop install git 7zip
 scoop bucket add java
 scoop install openjdk8-redhat
 ```
@@ -47,7 +48,7 @@ Similar'ish mods:
 - Ore Refinery (Dazs) - https://fractalsoftworks.com/forum/index.php?topic=22882.0
 - Supply Forging (Timid) - https://fractalsoftworks.com/forum/index.php?topic=17503.0
 
-This mod is inspired by Supply Forging, but uses no code from Supply Forging and has a completely different implementation.
+This mod is somewhat inspired by Supply Forging, but uses no code from Supply Forging and has a completely different implementation.
 
 ### Dedicated Repair Equipment
 - Dedicated Repair Equipment hullmod:<br/>
