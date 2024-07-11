@@ -145,10 +145,11 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 
 	@Override
 	public boolean isUsable() {
+		CampaignFleetAPI fleet = getFleet();
+		if (fleet == null) {
+			return false;
+		}
 		return true;
-		// CampaignFleetAPI fleet = getFleet();
-		// if (fleet == null)
-		// return false;
 
 		// return !Misc.isInsideSlipstream(fleet);
 		// return isActive() || !fleet.isInHyperspace();

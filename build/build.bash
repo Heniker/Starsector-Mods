@@ -58,10 +58,10 @@ rm -rf tmp
 
 cp "${W_DIR}/mod_info.json" "${OUT_DIR}/mod_info.json"
 
-CSV_FILES=$(find ${W_DIR} -type f -not -name "*.java")
+CSV_FILES=$(find "${W_DIR}" -type f -not -name "*.java")
 
-cd ${W_DIR}
-for i in $CSV_FILES; do
+cd "${W_DIR}"
+for i in ${CSV_FILES}; do
   cp $(realpath -s --relative-to="${W_DIR}" "$i") "${OUT_DIR}" --parents -r
 done
 
@@ -82,5 +82,4 @@ else
   7z rn "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${FILE_NAME}" "${BUNDLE_NAME}" > /dev/null
 fi
 
-echo
 echo Fin

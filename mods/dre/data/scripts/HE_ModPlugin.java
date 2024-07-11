@@ -41,8 +41,6 @@ public class HE_ModPlugin extends BaseModPlugin {
             it.repairTarget.getBuffManager()
                     .removeBuff(HE_DedicatedRepairEquipment.BUFF_ID);
         }
-
-        // Global.getSector().getPlayerFaction().id(HE_DedicatedRepairEquipment.ID);
     }
 
     @Override
