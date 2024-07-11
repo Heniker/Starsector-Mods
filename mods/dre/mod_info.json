@@ -4,7 +4,7 @@
   "author": "heniker",
   "version": "0.0.1",
   "description": "Allows Salvage Rig to repair other ships within fleet at the cost of metals.",
-  "gameVersion": "0.97a",
+  "gameVersion": "0.97a-RC11",
   "jars": ["dre.jar"],
   "modPlugin": "mods.dre.data.scripts.HE_ModPlugin"
 }
