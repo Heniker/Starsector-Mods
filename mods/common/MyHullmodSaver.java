@@ -126,7 +126,7 @@ public class MyHullmodSaver {
         continue;
       }
 
-      moddedFactions.add(modId);
+      moddedFactions.add(it.getId());
       it.removeKnownHullMod(modId);
     }
 
