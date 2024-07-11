@@ -1,26 +1,12 @@
 package mods.ir.data.campaign;
 
 import java.awt.Color;
-import java.util.EnumSet;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
-
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CampaignEngineLayers;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.combat.ShipVariantAPI;
-import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.abilities.BaseToggleAbility;
-import com.fs.starfarer.api.impl.campaign.abilities.GraviticScanData;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.terrain.SlipstreamTerrainPlugin.Stream;
-import com.fs.starfarer.api.loading.HullModSpecAPI;
-import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;

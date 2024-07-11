@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 
-import lunalib.lunaSettings.LunaSettings;
-import lunalib.lunaSettings.LunaSettingsListener;
 import mods.common.MyHullmodSaver;
 import mods.dre.data.config.HE_Settings;
 import mods.dre.data.hullmods.HE_DedicatedRepairEquipment;
