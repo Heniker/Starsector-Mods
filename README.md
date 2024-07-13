@@ -17,7 +17,7 @@ javac 1.8.0_342
 ```
 
 ### Develop
-During development mod should be placed in starsector mods folder.
+During development repo should be placed in starsector mods folder.
 
 For debugging add following to `vmparams` file in starsector directory:
 

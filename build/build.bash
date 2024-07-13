@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 FILE_NAME="${1}"
 
@@ -41,18 +42,7 @@ mkdir tmp
 readonly SOURCE_FILES="$(find ${W_DIR} -type f -name "*.java") $(find ${COMMON_DIR} -type f -name "*.java")"
 
 javac -source 1.7 -target 1.7 -cp "${LUNALIB}":"${STARSECTOR_CORE_DIR}/starfarer.api.jar":"${STARSECTOR_CORE_DIR}/lwjgl.jar":"${STARSECTOR_CORE_DIR}/lwjgl_util.jar":"${STARSECTOR_CORE_DIR}/xstream-1.4.10.jar":"${STARSECTOR_CORE_DIR}/log4j-1.2.9.jar" ${SOURCE_FILES} -d tmp
-
-if [[ ! $? -eq 0 ]]; then
-  echo Error happened. Exiting...
-  exit
-fi
-
 jar cf "${FILE_NAME}.jar" -C tmp .
-
-if [[ ! $? -eq 0 ]]; then
-  echo Error happened. Exiting...
-  exit
-fi
 
 rm -rf tmp
 
@@ -72,14 +62,14 @@ mkdir "${STARSECTOR_MOD_DIR}"
 cp -r "${BUILD_DIR}/${FILE_NAME}"/* "${STARSECTOR_MOD_DIR}"
 
 # create release archive
-7z > /dev/null
+7z >/dev/null || 0
 
 if [[ ! $? -eq 0 ]]; then
   echo 7z is not avaliable
 else
   rm -f "${BUILD_DIR}/${BUNDLE_NAME}.zip"
-  7z a "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${OUT_DIR}" > /dev/null
-  7z rn "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${FILE_NAME}" "${BUNDLE_NAME}" > /dev/null
+  7z a "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${OUT_DIR}" >/dev/null
+  7z rn "${BUILD_DIR}/${BUNDLE_NAME}.zip" "${FILE_NAME}" "${BUNDLE_NAME}" >/dev/null
 fi
 
 echo Fin
