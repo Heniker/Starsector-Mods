@@ -33,10 +33,10 @@ Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.z
 
 ### Improvised Refinery
 - Improvised Refinery hullmod:<br/>
-  Install an Improvised Refinery onto the ship. The Refinery can inefficently convert Ore into Metals.<br/>
-  The conversion speed is based on CR and number of ships with hullmod in fleet. Having nanoforge in cargo also influences conversion speed and efficiency.<br/>
+  Install an Improvised Refinery onto the ship. The Refinery can inefficiently convert Ore into Metals.<br/>
+  The conversion speed is based on CR and number of ships with hullmod within fleet. Having nanoforge in cargo also influences conversion speed and efficiency.<br/>
   A logistics hullmod. Can only be installed on Capital class ships. Unlocks when player gets Improvised Equipment skill. Can be randomly found in derelict structures.<br/>
-  Updates (effectively) in real-time<br/>
+  Updates (effectively) in real-time.<br/>
 
 - Toggle Refinery ability:<br/>
   Toggles Improvised Refinery hullmod for all ships within player fleet.<br/>
@@ -55,7 +55,7 @@ This mod is somewhat inspired by Supply Forging, but uses no code from Supply Fo
   Ship with this hullmod can aid in repairs of a single other ship within fleet.<br/>
   Increases repair speed, but not CR recovery speed.<br/>
   While target is repairing/recovering CR - the recovery supplies cost will be reduced.<br/>
-  Drains metals while active propotinal to target recovery cost.<br/>
+  Drains metals while active proportional to target recovery cost.<br/>
   Can not be installed. Built-in on Salvage Rig.<br/>
   To prevent hullmod from activating - disable repairs on Salvage Rig or mothball it.
 
