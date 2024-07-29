@@ -20,7 +20,7 @@ public class HE_Settings {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       return LunaSettings.getBoolean(modId, "SAFE_DELETE");
     }
-    return false;
+    return true;
   }
 
   static public String getCommodityFrom() {
