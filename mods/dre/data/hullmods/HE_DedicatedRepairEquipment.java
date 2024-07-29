@@ -48,7 +48,7 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
             && repairShip.getFleetData() != null
             && repairShip.getFleetData().getFleet() != null
             && repairShip.getFleetData().getFleet().getCargo().getCommodityQuantity(
-                  COMMODITY_USED) > 0
+                  COMMODITY_USED) > 0.1f
             && repairShip.getRepairTracker().getCR() >= MIN_CR
             && !repairShip.getRepairTracker().isSuspendRepairs()
             && MyMisc.isInFleet(repairShip.getFleetData(), repairTarget)
@@ -61,9 +61,7 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
    public static FleetMemberAPI getNewRepairTarget(FleetMemberAPI member) {
       for (FleetMemberAPI it : member.getFleetData().getMembersInPriorityOrder()) {
-         if (isValidForRepair(member, it)
-               && (it.getBuffManager().getBuff(BUFF_ID) == null
-                     || it.getBuffManager().getBuff(BUFF_ID).isExpired())) {
+         if (isValidForRepair(member, it) && !isRepairInProgress(it)) {
             return it;
          }
       }
@@ -71,9 +69,14 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
    }
 
    public static boolean isRepairInProgress(Buff buffInstance, FleetMemberAPI repairTarget) {
-      return repairTarget != null && buffInstance != null
-            && repairTarget.getBuffManager().getBuff(BUFF_ID) == buffInstance
-            && !buffInstance.isExpired();
+      return isRepairInProgress(repairTarget) && repairTarget.getBuffManager().getBuff(BUFF_ID) == buffInstance;
+
+   }
+
+   public static boolean isRepairInProgress(FleetMemberAPI repairTarget) {
+      return repairTarget != null
+            && repairTarget.getBuffManager().getBuff(BUFF_ID) != null
+            && !repairTarget.getBuffManager().getBuff(BUFF_ID).isExpired();
    }
 
    public float getUsedMetalsPerDay(MutableShipStatsAPI stats) {
@@ -120,7 +123,6 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
 
          float metalsShouldUse = metalsPerDay * days;
          cargo.removeCommodity(COMMODITY_USED, metalsShouldUse);
-
       }
    };
 
@@ -141,6 +143,12 @@ public class HE_DedicatedRepairEquipment extends BaseLogisticsHullMod {
          s.daysSinceLastTrigger = 0;
          data = state.put(member, s);
          data = s;
+      }
+
+      // simulation quality is not worth the theoretical possibility of breaking
+      // in-game scripted stuff
+      if (!isInPlayerFleet(member.getStats())) {
+         return;
       }
 
       data.daysSinceLastTrigger += Global.getSector().getClock().convertToDays(amount);

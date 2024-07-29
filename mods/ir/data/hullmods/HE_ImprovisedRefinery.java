@@ -103,7 +103,6 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
    public static class State {
       public float daysSinceLastTrigger;
-      public boolean isInPlayerFleet;
    }
 
    public static Map<FleetMemberAPI, State> state = new WeakHashMap<FleetMemberAPI, State>();
@@ -114,10 +113,13 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
       if (data == null) {
          State s = new State();
-         s.isInPlayerFleet = isInPlayerFleet(member.getStats());
          s.daysSinceLastTrigger = 0;
          data = state.put(member, s);
          data = s;
+      }
+
+      if (isInPlayerFleet(member.getStats()) && !getEnabledForPlayerFleet()) {
+         return;
       }
 
       data.daysSinceLastTrigger += Global.getSector().getClock().convertToDays(amount);
@@ -128,10 +130,6 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
       float days = data.daysSinceLastTrigger;
       data.daysSinceLastTrigger = 0;
-
-      if (data.isInPlayerFleet && !getEnabledForPlayerFleet()) {
-         return;
-      }
 
       try {
          float hasOre = member.getFleetData().getFleet().getCargo().getCommodityQuantity(COMMODITY_FROM);
@@ -167,7 +165,6 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
       if (data == null) {
          State s = new State();
-         s.isInPlayerFleet = isInPlayerFleet(stats);
          s.daysSinceLastTrigger = 0;
          data = state.put(member, s);
          data = s;

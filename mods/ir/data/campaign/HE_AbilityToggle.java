@@ -92,7 +92,7 @@ public class HE_AbilityToggle extends BaseToggleAbility {
 						+ MyMisc.prettifyCommodityKey(HE_ImprovisedRefinery.COMMODITY_TO) + " per day.",
 				pad, highlight,
 				"" + oreProcessedPerDay,
-				"" + ((HE_ImprovisedRefinery) MyMisc.getHullMod(HE_ImprovisedRefinery.ID)).getRecievedMetals(
+				"" + (int) ((HE_ImprovisedRefinery) MyMisc.getHullMod(HE_ImprovisedRefinery.ID)).getRecievedMetals(
 						fleet.getFleetData().getFleet().getCargo(),
 						oreProcessedPerDay));
 
