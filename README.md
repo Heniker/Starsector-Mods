@@ -35,7 +35,7 @@ Sparse API reference can be found in `Starsector/starsector-core/starfarer.api.z
 - Improvised Refinery hullmod:<br/>
   Install an Improvised Refinery onto the ship. The Refinery can inefficiently convert Ore into Metals.<br/>
   The conversion speed is based on CR and number of ships with hullmod within fleet. Having nanoforge in cargo also influences conversion speed and efficiency.<br/>
-  A logistics hullmod. Can only be installed on Capital class ships. Unlocks when player gets Improvised Equipment skill. Can be randomly found in derelict structures.<br/>
+  A logistics hullmod. Can only be installed on Capital class ships. Unlocks when player gets Makeshift Equipment skill. Can be randomly found in derelict structures.<br/>
   Updates (effectively) in real-time.<br/>
 
 - Toggle Refinery ability:<br/>
