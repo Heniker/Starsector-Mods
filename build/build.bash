@@ -22,7 +22,7 @@ readonly COMMON_DIR=$(realpath "${ROOT_DIR}/mods/common")
 readonly STARSECTOR_CORE_DIR=$(realpath "${BUILD_DIR}/../../../starsector-core")
 readonly STARSECTOR_MOD_DIR=$(realpath "${STARSECTOR_CORE_DIR}/../mods/${FILE_NAME}")
 
-readonly LUNALIB=$(realpath "${STARSECTOR_CORE_DIR}/../mods/LunaLib/jars/LunaLib.jar")
+readonly LUNALIB=$(realpath "${BUILD_DIR}/LunaLib.jar")
 
 BUNDLE_NAME="unnamed_bundle"
 if [[ "${FILE_NAME}" == "dre" ]]; then

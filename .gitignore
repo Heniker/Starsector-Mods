@@ -1,5 +1,6 @@
 _
 build/**
 !build/build.bash
-tmp
 *.jar
+!build/LunaLib.jar
+tmp
