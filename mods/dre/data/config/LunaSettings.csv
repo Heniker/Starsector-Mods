@@ -1,8 +1,8 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
-REPAIR_BONUS,Repair Rate bonus,Double,1.5,,Target Repair Rate increase while mod is active. Multiplicative.,0,10,
+REPAIR_BONUS,Repair Rate bonus,Double,1.2,,Target Repair Rate increase while mod is active. Multiplicative.,0,10,
 SUPPLIES_RECOVERY_BONUS,Supplies Recovery bonus,Double,0.5,,Target Supplies to Recover reduction while mod is active. Multiplicative. Lower values mean lower Recovery Cost.,0,1,
 USAGE_TAX,Metals Usage tax,Double,1.2,,Modifier applied to metals usage (i.e. Used Commodity). Multiplicative.  Higher values mean more metals usage.,0,4,
-COMMODITY_USED,Used Commodity,Radio,metals,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships,crew,marines,food",Commodity used for repairs.,,,
+COMMODITY_USED,Used Commodity,Radio,metals,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships",Commodity used for repairs.,,,
 ,,,,,,,,
 DAYS_TO_TRIGGER,Days to Trigger update,Double,0.3,,"Campaign days to trigger hullmod update. Math is adjusted to work correctly with any value, so this is mostly a minor performance optimization.",0,1,
-SAFE_DELETE,Safe to remove,Boolean,true,,Make a save with this option enabled before removing the mod.,,,
+SAFE_DELETE,Safe to remove,Boolean,false,,Make a save with this option enabled before removing the mod.,,,

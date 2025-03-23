@@ -68,7 +68,6 @@ Mod is 96% done;
 
 TODO:
 Add version checker integration
-Try to add conversionRate to Luna
 add indicator for IR ability describing contributing factors (Nanoforge, participating ships)
 
 Add icons for hullmods and ability
@@ -76,6 +75,7 @@ Add icons for hullmods and ability
 ? Add detection range increase while refinery is active
 
 TODONE:
+Try to add conversionRate to Luna
 +- Test Luna integraion
 Test nanoforge
 Add mod settings

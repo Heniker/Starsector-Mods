@@ -19,7 +19,7 @@ public class HE_Settings {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       return LunaSettings.getFloat(Constants.MOD_ID, "REPAIR_BONUS");
     }
-    return 1.5f;
+    return 1.2f;
   }
 
   public static float getSuppliesRecoveryBonus() {
