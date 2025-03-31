@@ -68,6 +68,7 @@ This idea came from old forum post mentioning how Salvage Rig used to work in th
 Mod is 96% done;
 
 TODO:
+Integration with Second in Command
 Add version checker integration
 add indicator for IR ability describing contributing factors (Nanoforge, participating ships)
 
