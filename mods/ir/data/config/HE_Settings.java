@@ -55,7 +55,7 @@ public class HE_Settings {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       return LunaSettings.getFloat(modId, "BASE_CONVERSION_SPEED");
     }
-    return 72f;
+    return 65f;
   }
 
   static public float getPristineNanoforgeTaxBonus() {
@@ -69,10 +69,10 @@ public class HE_Settings {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       return LunaSettings.getFloat(modId, "CONVERSION_TAX");
     }
-    return 0.75f;
+    return 0.70f;
   }
 
-  public static void updateSettings() {
+  static public void updateSettings() {
     HE_ImprovisedRefinery.DAYS_TO_TRIGGER = getDaysToTrigger();
     HE_ImprovisedRefinery.COMMODITY_FROM = getCommodityFrom();
     HE_ImprovisedRefinery.COMMODITY_TO = getCommodityTo();

@@ -70,7 +70,7 @@ Mod is 96% done;
 TODO:
 ir: Integration with Second in Command
 ir: Add conversion speed and ratio in description of the hullmod
-ir: add indicator for ability describing contributing factors (Nanoforge, participating ships)
+ir: add indicator for ability describing contributing factors (Nanoforge, participating ships) & conversion ratio
 Add version checker integration
 
 Add icons for hullmods and ability
