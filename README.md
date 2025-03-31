@@ -46,9 +46,10 @@ Safe to add/remove mid-game.
 Similar'ish mods: 
 - Aptly Simple Hullmods (Audax) - https://fractalsoftworks.com/forum/index.php?topic=24550.0
 - Ore Refinery (Dazs) - https://fractalsoftworks.com/forum/index.php?topic=22882.0
-- Supply Forging (Timid) - https://fractalsoftworks.com/forum/index.php?topic=17503.0
-
-This mod is somewhat inspired by Supply Forging, but uses no code from Supply Forging and has a completely different implementation.
+- Supply Forging (Timid) - https://fractalsoftworks.com/forum/index.php?topic=17503.0<br/>
+  This mod is somewhat inspired by Supply Forging, but uses no code from Supply Forging and has a completely different implementation.
+- prv Starworks (prav) - https://fractalsoftworks.com/forum/index.php?topic=12553.0<br/>
+  Rust Belt faction has Arc Smelter hullmod which does essentially the same thing.
 
 ### Dedicated Repair Equipment
 - Dedicated Repair Equipment hullmod:<br/>

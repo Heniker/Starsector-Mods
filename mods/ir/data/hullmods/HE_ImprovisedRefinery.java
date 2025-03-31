@@ -155,7 +155,7 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
 
    @Override
    public boolean isApplicableToShip(ShipAPI ship) {
-      return super.isApplicableToShip(ship) && ship.isCapital();
+      return ship.getVariant().hasHullMod(HullMods.CIVGRADE) && ship.isCapital() && super.isApplicableToShip(ship);
    }
 
    @Override
@@ -170,4 +170,12 @@ public class HE_ImprovisedRefinery extends BaseLogisticsHullMod {
          data = s;
       }
    }
+
+	@Override
+	public String getUnapplicableReason(ShipAPI ship) {
+		if (!ship.getVariant().hasHullMod(HullMods.CIVGRADE)) {
+			return "Can only be installed on civilian-grade hulls";
+		}
+		return super.getUnapplicableReason(ship);
+	}
 }
