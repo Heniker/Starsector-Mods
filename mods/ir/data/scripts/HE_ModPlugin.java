@@ -23,6 +23,9 @@ public class HE_ModPlugin extends BaseModPlugin {
       MyHullmodSaver.restoreModdedShips(HE_ImprovisedRefinery.ID);
     }
 
+    log.info("mods/ir/data/scripts/HE_ModPlugin.java:26");
+    log.info(HE_Settings.getUnlockAtStart());
+
     try {
       if (HE_Settings.getUnlockAtStart()
           || Global.getSector().getPlayerStats().getSkillLevel("makeshift_equipment") >= 1) {
@@ -33,13 +36,17 @@ public class HE_ModPlugin extends BaseModPlugin {
         Global.getSector().getCharacterData().addHullMod(HE_ImprovisedRefinery.ID);
       }
     } catch (NullPointerException err) {
+      log.info("mods/ir/data/scripts/HE_ModPlugin.java:36");
+      log.warn(err);
     }
-
+    
     try {
       if ((boolean) persist.get(ABILITY_ENABLED)) {
         Global.getSector().getPlayerFleet().getAbility(HE_AbilityToggle.ID).activate();
       }
     } catch (NullPointerException err) {
+      log.info("mods/ir/data/scripts/HE_ModPlugin.java:45");
+      log.warn(err);
     }
   }
 

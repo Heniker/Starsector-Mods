@@ -1,4 +1,5 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+_1,,Text,"Most settings can be updated mid-game (Use F2 default hotkey to open LunaLib)",,,,,
 CONVERSION_TAX,Conversion tax,Double,0.70,,Conversion process tax. Basically a penalty modifier applied to recieved resources. Multiplicative. Higher values mean more efficient conversion.,0,2,
 PRISTINE_N_TAX_BONUS_FLAT,Pristine Nanoforge flat tax bonus,Double,0.1,,"Having Pristine Nanoforge in inventory applies flat bonus to Conversion tax. Additive, non stacking.",0,1,
 BASE_CONVERSION_SPEED,Conversion rate,Double,65,,"Base conversion rate per day. It is then futher modified by SMod Bonus Rate, ship CR and other factors.",0,200,

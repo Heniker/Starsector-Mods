@@ -1,5 +1,7 @@
 package mods.ir.data.config;
 
+import org.apache.log4j.Logger;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 
@@ -8,6 +10,7 @@ import mods.ir.data.hullmods.HE_ImprovisedRefinery;
 
 public class HE_Settings {
   static String modId = "HE_ImprovisedRefinery";
+  public static Logger log = Global.getLogger(HE_Settings.class);
 
   static public float getDaysToTrigger() {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
@@ -76,13 +79,13 @@ public class HE_Settings {
   static public boolean getUnlockAtStart() {
     if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
       String option = LunaSettings.getString(modId, "UNLOCK_AT_START");
-      if (option == "auto") {
+      if (option.equals("auto")) {
         return Global.getSettings().getModManager().isModEnabled("second_in_command");
       }
-      if (option == "true") {
+      if (option.equals("true")) {
         return true;
       }
-      if (option == "false") {
+      if (option.equals("false")) {
         return false;
       }
       return false;

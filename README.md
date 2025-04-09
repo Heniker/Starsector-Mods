@@ -68,16 +68,16 @@ This idea came from old forum post mentioning how Salvage Rig used to work in th
 Mod is 96% done;
 
 TODO:
-ir: Integration with Second in Command
-ir: Add conversion speed and ratio in description of the hullmod
 ir: add indicator for ability describing contributing factors (Nanoforge, participating ships) & conversion ratio
-Add version checker integration
 
 Add icons for hullmods and ability
 ? Add post description for ImprovisedRefinery
 ? Add detection range increase while refinery is active
 
 TODONE:
+ir: Integration with Second in Command
+ir: Add conversion speed and ratio in description of the hullmod
+Add version checker integration
 Try to add conversionRate to Luna
 +- Test Luna integraion
 Test nanoforge
