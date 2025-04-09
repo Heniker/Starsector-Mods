@@ -2,7 +2,7 @@
   "id": "HE_ImprovisedRefinery",
   "name": "Improvised Refinery",
   "author": "Heniker",
-  "version": "0.0.4",
+  "version": "0.0.2",
   "description": "A hullmod that convers Ore into Metals. Unlocks after getting Improvised Equipment skill by default.",
   "gameVersion": "0.97a-RC11",
   "jars": ["ir.jar"],
