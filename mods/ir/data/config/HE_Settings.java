@@ -72,6 +72,24 @@ public class HE_Settings {
     return 0.70f;
   }
 
+  // not auto updated
+  static public boolean getUnlockAtStart() {
+    if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
+      String option = LunaSettings.getString(modId, "UNLOCK_AT_START");
+      if (option == "auto") {
+        return Global.getSettings().getModManager().isModEnabled("second_in_command");
+      }
+      if (option == "true") {
+        return true;
+      }
+      if (option == "false") {
+        return false;
+      }
+      return false;
+    }
+    return false;
+  }
+
   static public void updateSettings() {
     HE_ImprovisedRefinery.DAYS_TO_TRIGGER = getDaysToTrigger();
     HE_ImprovisedRefinery.COMMODITY_FROM = getCommodityFrom();

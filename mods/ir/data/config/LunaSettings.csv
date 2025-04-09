@@ -6,6 +6,7 @@ SMOD_BONUS_RATE,SMod bonus rate,Double,1.4,,SMod Conversion rate bonus. Multipli
 NANOFORGE_BONUS_RATE,Nanoforge bonus rate,Double,1.5,,"Having any Nanoforge in inventory applies this bonus to Conversion rate. Multiplicative, non stacking.",0,4,
 COMMODITY_FROM,Used Commodity,Radio,ore,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships",Commodity taken from cargo.,,,
 COMMODITY_TO,Gained Commodity,Radio,metals,"supplies,fuel,crew,marines,food,organics,volatiles,ore,rare_ore,metals,heavy_machinery,domestic_goods,organs,drugs,luxury_goods,lobster,ships",Commodity placed in cargo.,,,
+UNLOCK_AT_START,Unlock hullmod & ability at game start,Radio,auto,"true,false,auto","Auto basically means detect Second in Command, which prevents normal skill progression. Reload save to take effect.",,,
 ,,,,,,,,
 DAYS_TO_TRIGGER,Days to Trigger update,Double,0.3,,"Campaign days to trigger hullmod update. Math is adjusted to work correctly with any value, so this is mostly a minor performance optimization.",0,1,
 SAFE_DELETE,Safe to remove,Boolean,false,,Make a save with this option enabled before removing the mod.,,,

@@ -12,11 +12,11 @@
     "..\\..\\mods\\MagicLib\\jars\\MagicLib.jar",
     "..\\..\\mods\\zz GraphicsLib\\jars\\Graphics.jar"
   ],
-  "java.configuration.runtimes": [
-    {
-      "name": "JavaSE-1.7",
-      "path": "..\\..\\jre",
-      "default": true
-    }
-  ]
+  // "java.configuration.runtimes": [
+  //   {
+  //     "name": "JavaSE-1.7",
+  //     "path": "..\\..\\jre",
+  //     "default": true
+  //   }
+  // ]
 }

@@ -1,0 +1,11 @@
+{
+  "masterVersionFile": "https://raw.githubusercontent.com/Heniker/Starsector-Mods/main/mods/ir/ImprovisedRefinery.version",
+  "modName": "Improvised Refinery",
+  "modVersion": {
+    "major": 0,
+    "minor": 0,
+    "patch": 4
+  },
+  "directDownloadURL": "https://github.com/Heniker/Starsector-Mods/releases/latest/download/Improvised.Refinery.zip",
+  "changelogURL": "https://raw.githubusercontent.com/Heniker/Starsector-Mods/main/README.md"
+}

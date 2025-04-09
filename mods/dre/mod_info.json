@@ -2,7 +2,7 @@
   "id": "HE_DedicatedRepairEquipment",
   "name": "Dedicated Repair Equipment",
   "author": "Heniker",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Allows Salvage Rig to repair other ships within fleet at the cost of metals.",
   "gameVersion": "0.97a-RC11",
   "jars": ["dre.jar"],
