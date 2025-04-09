@@ -1,5 +1,5 @@
 {
-  "masterVersionFile": "https://raw.githubusercontent.com/Heniker/Starsector-Mods/main/mods/ir/DedicatedRepairEquipment.version",
+  "masterVersionFile": "https://raw.githubusercontent.com/Heniker/Starsector-Mods/main/mods/dre/DedicatedRepairEquipment.version",
   "modName": "Dedicated Repair Equipment",
   "modVersion": {
     "major": 0,
